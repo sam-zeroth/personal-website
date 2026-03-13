@@ -20,25 +20,24 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sammerk.io"),
-  title: "Sam Merkovitz — Neural Portfolio",
-  description: "Interactive 3D brain portfolio — explore work, writing, and more through neural pathways.",
+  title: {
+    default: "Sam Merkovitz — Things I've Made and Thought About",
+    template: "%s — Sam Merkovitz",
+  },
+  description:
+    "Personal site of Sam Merkovitz — projects, writing, and things I'm thinking about.",
+  icons: {
+    icon: "/sam-logo-black.png",
+    apple: "/sam-logo-black.png",
+  },
   openGraph: {
-    title: "Sam Merkovitz — Neural Portfolio",
-    description: "Interactive 3D brain portfolio — explore work, writing, and more through neural pathways.",
-    images: [
-      {
-        url: "/sam-logo-black.png",
-        width: 345,
-        height: 333,
-        alt: "Sam Merkovitz Logo",
-      },
-    ],
+    type: "website",
+    siteName: "Sam Merkovitz",
+    locale: "en_US",
   },
   twitter: {
-    card: "summary",
-    title: "Sam Merkovitz — Neural Portfolio",
-    description: "Interactive 3D brain portfolio — explore work, writing, and more through neural pathways.",
-    images: ["/sam-logo-black.png"],
+    card: "summary_large_image",
+    creator: "@sammerkovitz",
   },
 };
 

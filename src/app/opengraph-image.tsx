@@ -1,0 +1,60 @@
+import { ImageResponse } from "next/og";
+
+export const runtime = "edge";
+export const alt = "Sam Merkovitz — Things I've Made and Thought About";
+export const size = { width: 1200, height: 630 };
+export const contentType = "image/png";
+
+export default async function OGImage() {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#000",
+          color: "#fff",
+          fontFamily: "sans-serif",
+        }}
+      >
+        {/* Logo SVG inline */}
+        <svg
+          width="240"
+          height="232"
+          viewBox="0 0 345 333"
+          fill="none"
+        >
+          <path
+            d="M143.823 20.0787C161.04 8.02346 183.96 8.02347 201.177 20.0787L314.766 99.6085C332.739 112.192 340.408 135.023 333.678 155.905L290.349 290.338C283.691 310.997 264.465 325 242.76 325H102.24C80.535 325 61.309 310.997 54.6507 290.338L11.3221 155.905C4.59157 135.023 12.2611 112.192 30.2339 99.6085L143.823 20.0787Z"
+            stroke="white"
+            strokeWidth="16"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M41 247.5C41 247.5 127.5 328 165.5 247.5C180 177 56.5 207 59 138C67 95.5 128 94 151 118C182.146 150.5 214.5 211.5 214.5 211.5"
+            stroke="white"
+            strokeWidth="16"
+          />
+          <path
+            d="M297 269C297 269 297 176 294.5 142C292 112 274 117.179 265.5 127.5C242.895 164 216.5 209.5 216.5 209.5"
+            stroke="white"
+            strokeWidth="16"
+          />
+          <circle
+            cx="215"
+            cy="224"
+            r="8"
+            fill="#555"
+            stroke="white"
+            strokeWidth="14"
+          />
+        </svg>
+      </div>
+    ),
+    { ...size }
+  );
+}

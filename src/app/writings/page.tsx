@@ -3,7 +3,7 @@ import { getAllWritings, type WritingMeta } from "@/lib/writings";
 import SamLogo from "@/components/ui/SamLogo";
 
 export const metadata = {
-  title: "Writings — Sam Merkovitz",
+  title: "Writings",
   description:
     "Essays, technical posts, and things I'm thinking about.",
 };

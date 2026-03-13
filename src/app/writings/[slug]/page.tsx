@@ -29,11 +29,17 @@ export async function generateMetadata({
       options: { parseFrontmatter: true },
     });
     return {
-      title: `${frontmatter.title} — Sam Merkovitz`,
+      title: frontmatter.title,
       description: frontmatter.excerpt,
+      openGraph: {
+        type: "article",
+        title: frontmatter.title,
+        description: frontmatter.excerpt,
+        publishedTime: frontmatter.date,
+      },
     };
   } catch {
-    return { title: "Writing — Sam Merkovitz" };
+    return { title: "Writing" };
   }
 }
 
