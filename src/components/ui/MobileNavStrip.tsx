@@ -12,36 +12,126 @@ export default function MobileNavStrip() {
     <AnimatePresence>
       {visible && (
         <motion.nav
-          className="fixed bottom-0 left-0 right-0 z-10 sm:hidden"
-          initial={{ y: "100%" }}
-          animate={{ y: 0 }}
-          exit={{ y: "100%" }}
-          transition={{ type: "spring", damping: 25, stiffness: 200 }}
+          className="fixed z-10 sm:hidden left-0 right-0 flex justify-center"
+          style={{
+            bottom: "calc(16px + env(safe-area-inset-bottom, 0px))",
+          }}
+          initial={{ y: 60, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 60, opacity: 0 }}
+          transition={{ type: "spring", damping: 28, stiffness: 260 }}
         >
+          {/* Liquid glass capsule */}
           <div
-            className="grid grid-cols-4"
             style={{
-              background: "rgba(255, 255, 255, 0.9)",
-              backdropFilter: "blur(10px)",
-              WebkitBackdropFilter: "blur(10px)",
-              borderTop: "1px solid rgba(0, 0, 0, 0.06)",
-              paddingBottom: "env(safe-area-inset-bottom)",
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+              borderRadius: 50,
+              padding: "10px 8px",
+              overflow: "hidden",
             }}
           >
-            {brainRegions.map((region) => (
-              <button
+            {/* Glass layer — iridescent */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                borderRadius: 50,
+                background:
+                  "linear-gradient(135deg, rgba(0,212,255,0.08) 0%, rgba(123,47,247,0.06) 33%, rgba(255,0,110,0.06) 66%, rgba(0,230,118,0.08) 100%)",
+                backdropFilter: "blur(24px) saturate(180%) brightness(1.02)",
+                WebkitBackdropFilter:
+                  "blur(24px) saturate(180%) brightness(1.02)",
+              }}
+            />
+
+            {/* Border + outer shadow — lens edge */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                borderRadius: 50,
+                border: "1px solid rgba(255, 255, 255, 0.45)",
+                boxShadow:
+                  "0 6px 24px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -1px 0 rgba(0, 0, 0, 0.04)",
+                pointerEvents: "none",
+              }}
+            />
+
+            {/* Specular highlight — top shine */}
+            <div
+              style={{
+                position: "absolute",
+                top: 1,
+                left: "10%",
+                right: "10%",
+                height: "45%",
+                borderRadius: "50px 50px 60% 60%",
+                background:
+                  "linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.0) 100%)",
+                pointerEvents: "none",
+              }}
+            />
+
+            {/* Nav items */}
+            {brainRegions.map((region, i) => (
+              <motion.button
                 key={region.id}
                 onClick={() => navigateTo(region.id)}
-                className="flex flex-col items-center gap-1 py-3 cursor-pointer active:bg-gray-50 transition-colors"
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.05 * i, type: "spring", damping: 20 }}
+                style={{
+                  position: "relative",
+                  zIndex: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "6px 16px",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  WebkitTapHighlightColor: "transparent",
+                }}
               >
-                <div
-                  className="w-2.5 h-2.5 rounded-full"
-                  style={{ background: region.color }}
-                />
-                <span className="text-[10px] font-medium tracking-wide text-gray-600">
+                {/* Neural node */}
+                <div style={{ position: "relative", width: 14, height: 14 }}>
+                  {/* Outer glow ring */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: -4,
+                      borderRadius: "50%",
+                      background: `radial-gradient(circle, ${region.color}30 0%, transparent 70%)`,
+                    }}
+                  />
+                  {/* Core dot */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 2,
+                      borderRadius: "50%",
+                      background: region.color,
+                      boxShadow: `0 0 10px ${region.color}50, 0 0 3px ${region.color}80`,
+                    }}
+                  />
+                </div>
+
+                {/* Label */}
+                <span
+                  style={{
+                    fontSize: 10,
+                    fontWeight: 600,
+                    letterSpacing: "0.03em",
+                    color: "rgba(40, 40, 50, 0.6)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
                   {region.label}
                 </span>
-              </button>
+              </motion.button>
             ))}
           </div>
         </motion.nav>

@@ -9,7 +9,7 @@ export default function BrainScene() {
   return (
     <Canvas
       camera={{ position: [0, 0, 4.5], fov: 60 }}
-      style={{ background: "#ffffff" }}
+      style={{ background: "#ffffff", touchAction: "none" }}
       gl={{ antialias: true, alpha: true }}
     >
       <Suspense fallback={null}>

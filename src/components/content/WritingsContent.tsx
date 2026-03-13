@@ -14,40 +14,13 @@ const COLOR = "#ff006e";
 
 const posts = [
   {
-    title: "On Building in Public",
+    title: "What Is It Like to Be Claude?",
     excerpt:
-      "Why sharing your process is more valuable than polishing your product...",
-    date: "Mar 2025",
+      "An exploratory analysis of machine experience, after Thomas Nagel. I asked Claude to turn the hard problem of consciousness inward.",
+    date: "Mar 2026",
     tag: "Essay",
-    slug: "on-building-in-public",
-    readingTime: "6 min read",
-  },
-  {
-    title: "The Architecture of Thought",
-    excerpt:
-      "How neural networks mirror the way we organize ideas and make connections...",
-    date: "Feb 2025",
-    tag: "Blog",
-    slug: "the-architecture-of-thought",
-    readingTime: "8 min read",
-  },
-  {
-    title: "Three.js Performance Tips",
-    excerpt:
-      "Lessons learned from building a 3D brain visualization for the web...",
-    date: "Jan 2025",
-    tag: "Technical",
-    slug: "threejs-performance-tips",
+    slug: "what-is-it-like-to-be-claude",
     readingTime: "12 min read",
-  },
-  {
-    title: "Design as Communication",
-    excerpt:
-      "Every pixel is a word. Every interaction is a sentence. Every experience tells a story...",
-    date: "Dec 2024",
-    tag: "Essay",
-    slug: "design-as-communication",
-    readingTime: "5 min read",
   },
 ];
 

@@ -37,7 +37,7 @@ export default function NavigationOverlay() {
       <AnimatePresence>
         {!isZoomed && (
           <motion.div
-            className="fixed bottom-24 sm:bottom-8 left-1/2 -translate-x-1/2 z-10"
+            className="fixed bottom-28 sm:bottom-8 left-1/2 -translate-x-1/2 z-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}

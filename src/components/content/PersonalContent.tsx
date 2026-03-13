@@ -13,25 +13,35 @@ const COLOR = "#7b2ff7";
 
 const timeline = [
   {
-    period: "Present",
-    title: "Building cool things",
-    desc: "Working on projects that push boundaries at the intersection of technology and human experience.",
+    period: "Now",
+    title: "Zeroth Technology",
+    desc: "Building Pyrana — an Enterprise Agent Orchestration Platform. Working on the frontier of AI systems and multi-agent coordination.",
   },
   {
     period: "Previously",
-    title: "Various adventures",
-    desc: "Exploring different domains and technologies, from data engineering to creative coding.",
+    title: "Kenvue (J&J spin-off)",
+    desc: "AdTech — built novel algorithms to improve advertising targeting and spend optimization, working on the future of advertising technology.",
+  },
+  {
+    period: "Previously",
+    title: "Johnson & Johnson",
+    desc: "Corporate Technology & MedTech — engineering across enterprise systems and medical technology platforms.",
+  },
+  {
+    period: "Previously",
+    title: "Genentech",
+    desc: "Data Management — working with biotech data systems at one of the world's leading biotechnology companies.",
   },
 ];
 
 const interests = [
+  "Philosophy of Mind",
+  "Computational Science",
+  "Logic",
+  "Basketball",
+  "Reading",
   "AI & ML",
-  "3D Graphics",
-  "Music",
-  "Design",
-  "Philosophy",
-  "Open Source",
-  "Neuroscience",
+  "Tinkering",
   "Writing",
 ];
 
@@ -49,17 +59,36 @@ export default function PersonalContent() {
 
       <motion.div variants={fadeUp} style={{ marginBottom: 28 }}>
         <p className="text-[13px] text-gray-600 leading-relaxed">
-          Builder, thinker, and maker. I love creating things at the
-          intersection of technology and human experience. This brain portfolio
-          is a reflection of how I think — everything is connected.
+          Northeastern University grad with a BS in Computer Science and
+          Philosophy. Deeply interested in the intersections of mind,
+          computation, and logic. Currently building AI agent infrastructure at
+          Zeroth Technology. Always reading, always learning.
         </p>
+        <a
+          href="https://linkedin.com/in/sam-merkovitz"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-[12px] font-medium text-[#7b2ff7] hover:text-[#6020d0] transition-colors"
+          style={{ marginTop: 12 }}
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+          </svg>
+          Connect on LinkedIn
+        </a>
       </motion.div>
 
-      <SubHeading color={COLOR}>Background</SubHeading>
+      <SubHeading color={COLOR}>Experience</SubHeading>
 
-      {timeline.map((item) => (
+      {timeline.map((item, i) => (
         <motion.div
-          key={item.period}
+          key={item.title}
           variants={fadeUp}
           className="rounded-xl bg-gray-50/80 border-l-[3px] border-transparent hover:border-l-[#7b2ff7] transition-all"
           style={{ padding: 16, marginBottom: 10 }}
