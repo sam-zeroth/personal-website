@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drawer Mockups — Neural Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --cyan: #00d4ff;
+    --cyan-dim: #00d4ff22;
+    --cyan-mid: #00d4ff44;
+    --fg: #111118;
+    --fg-muted: #6b6b7b;
+    --fg-faint: #a0a0b0;
+    --border: #e8e8ee;
+    --bg: #ffffff;
+    --bg-hover: #f6f6f9;
+    --mono: 'Geist Mono', 'SF Mono', 'Fira Code', monospace;
+    --sans: 'Inter', -apple-system, system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--sans);
+    background: #eeeef2;
+    padding: 40px 32px;
+    color: var(--fg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page-header {
+    max-width: 1800px;
+    margin: 0 auto 40px;
+  }
+
+  .page-header h1 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+
+  .page-header p {
+    font-size: 13px;
+    color: var(--fg-muted);
+    margin-top: 4px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 420px);
+    gap: 32px;
+    max-width: 1800px;
+    margin: 0 auto;
+    overflow-x: auto;
+    padding-bottom: 20px;
+  }
+
+  .col-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+    margin-bottom: 14px;
+    padding-left: 4px;
+  }
+
+  /* Each drawer panel */
+  .drawer {
+    width: 420px;
+    min-height: 780px;
+    background: var(--bg);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.03);
+    position: relative;
+  }
+
+  /* ================================================================
+     VARIANT A — "Whisper"
+     Maximum whitespace. Content breathes. Typography does the work.
+     ================================================================ */
+  .v-a .top-bar {
+    height: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--cyan-mid), transparent);
+  }
+
+  .v-a .inner { padding: 36px 32px 32px; }
+
+  .v-a .close-btn {
+    position: absolute; top: 18px; right: 20px;
+    width: 28px; height: 28px; border-radius: 50%;
+    border: none; background: transparent; cursor: pointer;
+    display: grid; place-items: center;
+    color: var(--fg-faint);
+    transition: background 0.2s;
+  }
+  .v-a .close-btn:hover { background: var(--bg-hover); }
+
+  .v-a .lobe-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+  }
+
+  .v-a .section-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--fg);
+    margin-top: 4px;
+    line-height: 1.15;
+  }
+
+  .v-a .section-desc {
+    font-size: 13px;
+    color: var(--fg-muted);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  .v-a .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  .v-a .sub-heading {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+    margin-bottom: 16px;
+  }
+
+  .v-a .project {
+    margin-bottom: 24px;
+  }
+  .v-a .project-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+  }
+  .v-a .project-desc {
+    font-size: 12px;
+    color: var(--fg-muted);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+  .v-a .project-tech {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .v-a .tech-tag {
+    font-size: 10px;
+    color: var(--fg-faint);
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: var(--mono);
+  }
+
+  .v-a .skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .v-a .skill {
+    font-size: 12px;
+    color: var(--fg-muted);
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .v-a .skill:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+
+
+  /* ================================================================
+     VARIANT B — "Signal"
+     Left accent rail. Monospace metadata. Data-forward.
+     ================================================================ */
+  .v-b { display: flex; }
+
+  .v-b .rail {
+    width: 4px;
+    background: var(--cyan);
+    flex-shrink: 0;
+  }
+
+  .v-b .inner { padding: 32px 28px 28px; flex: 1; }
+
+  .v-b .close-btn {
+    position: absolute; top: 16px; right: 16px;
+    width: 28px; height: 28px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--bg); cursor: pointer;
+    display: grid; place-items: center;
+    color: var(--fg-faint); font-size: 14px;
+    transition: all 0.2s;
+  }
+  .v-b .close-btn:hover { border-color: var(--fg-faint); }
+
+  .v-b .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .v-b .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cyan);
+  }
+  .v-b .lobe-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .v-b .lobe-fn {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--fg-faint);
+    margin-left: auto;
+  }
+
+  .v-b .section-title {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-top: 2px;
+  }
+
+  .v-b .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  .v-b .sub-heading {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+    margin-bottom: 14px;
+  }
+
+  .v-b .project {
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+  .v-b .project:hover {
+    border-color: var(--cyan-mid);
+  }
+
+  .v-b .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .v-b .project-name {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .v-b .project-year {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--fg-faint);
+  }
+  .v-b .project-desc {
+    font-size: 12px;
+    color: var(--fg-muted);
+    margin-top: 4px;
+    line-height: 1.45;
+  }
+  .v-b .project-tech {
+    display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap;
+  }
+  .v-b .tech-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 7px;
+    background: var(--cyan-dim);
+    color: #0099bb;
+    border-radius: 4px;
+  }
+
+  .v-b .skills-grid {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .v-b .skill {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-muted);
+    padding: 4px 10px;
+    background: var(--bg-hover);
+    border-radius: 4px;
+  }
+
+
+  /* ================================================================
+     VARIANT C — "Cortex"
+     Neural decoration. Connection lines. Organic feel.
+     ================================================================ */
+  .v-c { overflow: hidden; }
+
+  .v-c .neural-bg {
+    position: absolute;
+    top: 0; right: 0;
+    width: 200px; height: 200px;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+  .v-c .neural-bg circle { fill: var(--cyan); }
+  .v-c .neural-bg line { stroke: var(--cyan); stroke-width: 0.5; }
+
+  .v-c .inner { padding: 32px 30px 28px; position: relative; }
+
+  .v-c .close-btn {
+    position: absolute; top: 18px; right: 18px;
+    width: 28px; height: 28px; border-radius: 50%;
+    border: none; background: transparent; cursor: pointer;
+    display: grid; place-items: center;
+    color: var(--fg-faint);
+  }
+
+  .v-c .header-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .v-c .icon-circle {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--cyan-dim);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .v-c .icon-circle .dot-inner {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--cyan);
+  }
+
+  .v-c .lobe-tag {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    font-weight: 500;
+  }
+  .v-c .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-top: 1px;
+  }
+  .v-c .lobe-fn {
+    font-size: 11px;
+    color: var(--fg-faint);
+    margin-top: 2px;
+  }
+
+  .v-c .conn-line {
+    height: 1px;
+    margin: 24px 0;
+    background: var(--border);
+    position: relative;
+  }
+  .v-c .conn-line::before {
+    content: '';
+    position: absolute;
+    left: 0; top: -3px;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--cyan);
+  }
+  .v-c .conn-line::after {
+    content: '';
+    position: absolute;
+    left: 80px; top: -2px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--cyan-mid);
+  }
+
+  .v-c .sub-heading {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .v-c .sub-heading::before {
+    content: '';
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--cyan);
+  }
+
+  .v-c .project {
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--bg-hover);
+    margin-bottom: 10px;
+    border-left: 3px solid transparent;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+  .v-c .project:hover {
+    border-left-color: var(--cyan);
+  }
+  .v-c .project-name {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .v-c .project-desc {
+    font-size: 12px;
+    color: var(--fg-muted);
+    margin-top: 3px;
+    line-height: 1.45;
+  }
+  .v-c .project-tech {
+    display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap;
+  }
+  .v-c .tech-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--fg-muted);
+  }
+
+  .v-c .skills-grid {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .v-c .skill {
+    font-size: 12px;
+    color: var(--fg-muted);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .v-c .skill:hover {
+    background: var(--cyan-dim);
+    border-color: var(--cyan-mid);
+    color: #0099bb;
+  }
+
+
+  /* ================================================================
+     VARIANT D — "Axon"
+     Dark drawer. Terminal vibes. Neon accents.
+     ================================================================ */
+  .v-d {
+    background: #0c0c14;
+    color: #c8c8d8;
+  }
+
+  .v-d .inner { padding: 32px 28px 28px; }
+
+  .v-d .close-btn {
+    position: absolute; top: 16px; right: 16px;
+    width: 28px; height: 28px; border-radius: 6px;
+    border: 1px solid #2a2a3a; background: transparent; cursor: pointer;
+    display: grid; place-items: center;
+    color: #555;
+    transition: border-color 0.2s;
+  }
+  .v-d .close-btn:hover { border-color: #444; }
+
+  .v-d .top-glow {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 120px;
+    background: radial-gradient(ellipse at top center, rgba(0,212,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .v-d .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    position: relative;
+  }
+  .v-d .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+  }
+  .v-d .lobe-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .v-d .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #eeeef4;
+    position: relative;
+  }
+
+  .v-d .section-desc {
+    font-size: 12px;
+    color: #6a6a7a;
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  .v-d .divider {
+    height: 1px;
+    background: #1e1e2e;
+    margin: 24px 0;
+  }
+
+  .v-d .sub-heading {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #4a4a5a;
+    margin-bottom: 14px;
+  }
+
+  .v-d .project {
+    padding: 14px 16px;
+    border: 1px solid #1e1e2e;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .v-d .project:hover {
+    border-color: #00d4ff30;
+    background: #00d4ff06;
+  }
+
+  .v-d .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .v-d .project-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #dddde8;
+    letter-spacing: -0.01em;
+  }
+  .v-d .project-year {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: #3a3a4a;
+  }
+  .v-d .project-desc {
+    font-size: 12px;
+    color: #6a6a7a;
+    margin-top: 4px;
+    line-height: 1.45;
+  }
+  .v-d .project-tech {
+    display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap;
+  }
+  .v-d .tech-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 7px;
+    background: #00d4ff10;
+    color: #00aad0;
+    border-radius: 3px;
+    border: 1px solid #00d4ff18;
+  }
+
+  .v-d .skills-grid {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .v-d .skill {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #6a6a7a;
+    padding: 4px 10px;
+    border: 1px solid #1e1e2e;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .v-d .skill:hover {
+    border-color: var(--cyan-mid);
+    color: var(--cyan);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Drawer Panel Mockups</h1>
+  <p>4 variations for the slide-in content panel — all showing Work / Frontal Lobe</p>
+</div>
+
+<div class="grid">
+
+  <!-- ═══════ A — "Whisper" ═══════ -->
+  <div>
+    <div class="col-label">A — Whisper</div>
+    <div class="drawer v-a">
+      <div class="top-bar"></div>
+      <div class="inner">
+        <button class="close-btn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+        </button>
+
+        <div class="lobe-tag">Frontal Lobe</div>
+        <div class="section-title">Work</div>
+        <div class="section-desc">The executive center — where plans become projects and ideas become systems.</div>
+
+        <div class="divider"></div>
+
+        <div class="sub-heading">Projects</div>
+
+        <div class="project">
+          <div class="project-name">Data Pipeline Platform</div>
+          <div class="project-desc">Real-time ingestion engine processing 2M+ events/day with sub-second latency.</div>
+          <div class="project-tech">
+            <span class="tech-tag">Go</span>
+            <span class="tech-tag">Kafka</span>
+            <span class="tech-tag">ClickHouse</span>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-name">Neural Portfolio</div>
+          <div class="project-desc">This site — a 3D brain visualization built with React Three Fiber.</div>
+          <div class="project-tech">
+            <span class="tech-tag">Next.js</span>
+            <span class="tech-tag">Three.js</span>
+            <span class="tech-tag">GLSL</span>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-name">ML Recommendation Engine</div>
+          <div class="project-desc">Content recommendation system serving personalized feeds to 500K users.</div>
+          <div class="project-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">TensorFlow</span>
+            <span class="tech-tag">Redis</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="sub-heading">Skills</div>
+        <div class="skills-grid">
+          <span class="skill">React</span>
+          <span class="skill">TypeScript</span>
+          <span class="skill">Node.js</span>
+          <span class="skill">Python</span>
+          <span class="skill">Go</span>
+          <span class="skill">Three.js</span>
+          <span class="skill">PostgreSQL</span>
+          <span class="skill">AWS</span>
+          <span class="skill">Docker</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ B — "Signal" ═══════ -->
+  <div>
+    <div class="col-label">B — Signal</div>
+    <div class="drawer v-b">
+      <div class="rail"></div>
+      <div class="inner">
+        <button class="close-btn">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+        </button>
+
+        <div class="meta-row">
+          <span class="dot"></span>
+          <span class="lobe-tag">Frontal Lobe</span>
+          <span class="lobe-fn">exec · plan · decide</span>
+        </div>
+        <div class="section-title">Work</div>
+
+        <div class="divider"></div>
+
+        <div class="sub-heading">// Projects</div>
+
+        <div class="project">
+          <div class="project-header">
+            <span class="project-name">Data Pipeline Platform</span>
+            <span class="project-year">2024</span>
+          </div>
+          <div class="project-desc">Real-time ingestion engine processing 2M+ events/day with sub-second latency.</div>
+          <div class="project-tech">
+            <span class="tech-tag">Go</span>
+            <span class="tech-tag">Kafka</span>
+            <span class="tech-tag">ClickHouse</span>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-header">
+            <span class="project-name">Neural Portfolio</span>
+            <span class="project-year">2025</span>
+          </div>
+          <div class="project-desc">This site — a 3D brain visualization built with React Three Fiber.</div>
+          <div class="project-tech">
+            <span class="tech-tag">Next.js</span>
+            <span class="tech-tag">Three.js</span>
+            <span class="tech-tag">GLSL</span>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-header">
+            <span class="project-name">ML Recommendation Engine</span>
+            <span class="project-year">2024</span>
+          </div>
+          <div class="project-desc">Content recommendation system serving personalized feeds to 500K users.</div>
+          <div class="project-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">TensorFlow</span>
+            <span class="tech-tag">Redis</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="sub-heading">// Skills</div>
+        <div class="skills-grid">
+          <span class="skill">React</span>
+          <span class="skill">TypeScript</span>
+          <span class="skill">Node.js</span>
+          <span class="skill">Python</span>
+          <span class="skill">Go</span>
+          <span class="skill">Three.js</span>
+          <span class="skill">PostgreSQL</span>
+          <span class="skill">AWS</span>
+          <span class="skill">Docker</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ C — "Cortex" ═══════ -->
+  <div>
+    <div class="col-label">C — Cortex</div>
+    <div class="drawer v-c">
+      <svg class="neural-bg" viewBox="0 0 200 200">
+        <circle cx="160" cy="30" r="2"/><circle cx="180" cy="50" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+        <circle cx="170" cy="80" r="2"/><circle cx="150" cy="45" r="1"/><circle cx="190" cy="70" r="1"/>
+        <circle cx="130" cy="30" r="1.5"/><circle cx="185" cy="25" r="1"/><circle cx="155" cy="90" r="1.5"/>
+        <line x1="160" y1="30" x2="180" y2="50"/><line x1="180" y1="50" x2="170" y2="80"/>
+        <line x1="140" y1="60" x2="170" y2="80"/><line x1="160" y1="30" x2="140" y2="60"/>
+        <line x1="150" y1="45" x2="180" y2="50"/><line x1="130" y1="30" x2="160" y2="30"/>
+        <line x1="170" y1="80" x2="155" y2="90"/><line x1="185" y1="25" x2="160" y2="30"/>
+        <line x1="190" y1="70" x2="180" y2="50"/>
+      </svg>
+      <div class="inner">
+        <button class="close-btn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+        </button>
+
+        <div class="header-group">
+          <div class="icon-circle"><div class="dot-inner"></div></div>
+          <div>
+            <div class="lobe-tag">Frontal Lobe</div>
+            <div class="section-title">Work</div>
+            <div class="lobe-fn">Planning, decision-making & execution</div>
+          </div>
+        </div>
+
+        <div class="conn-line"></div>
+
+        <div class="sub-heading">Projects</div>
+
+        <div class="project">
+          <div class="project-name">Data Pipeline Platform</div>
+          <div class="project-desc">Real-time ingestion engine processing 2M+ events/day with sub-second latency.</div>
+          <div class="project-tech">
+            <span class="tech-tag">Go</span>
+            <span class="tech-tag">Kafka</span>
+            <span class="tech-tag">ClickHouse</span>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-name">Neural Portfolio</div>
+          <div class="project-desc">This site — a 3D brain visualization built with React Three Fiber.</div>
+          <div class="project-tech">
+            <span class="tech-tag">Next.js</span>
+            <span class="tech-tag">Three.js</span>
+            <span class="tech-tag">GLSL</span>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-name">ML Recommendation Engine</div>
+          <div class="project-desc">Content recommendation system serving personalized feeds to 500K users.</div>
+          <div class="project-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">TensorFlow</span>
+            <span class="tech-tag">Redis</span>
+          </div>
+        </div>
+
+        <div class="conn-line"></div>
+
+        <div class="sub-heading">Skills</div>
+        <div class="skills-grid">
+          <span class="skill">React</span>
+          <span class="skill">TypeScript</span>
+          <span class="skill">Node.js</span>
+          <span class="skill">Python</span>
+          <span class="skill">Go</span>
+          <span class="skill">Three.js</span>
+          <span class="skill">PostgreSQL</span>
+          <span class="skill">AWS</span>
+          <span class="skill">Docker</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ D — "Axon" ═══════ -->
+  <div>
+    <div class="col-label">D — Axon</div>
+    <div class="drawer v-d">
+      <div class="top-glow"></div>
+      <div class="inner">
+        <button class="close-btn">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+        </button>
+
+        <div class="meta-row">
+          <span class="dot"></span>
+          <span class="lobe-tag">Frontal Lobe</span>
+        </div>
+        <div class="section-title">Work</div>
+        <div class="section-desc">The executive center — where plans become projects and ideas become systems.</div>
+
+        <div class="divider"></div>
+
+        <div class="sub-heading">// projects</div>
+
+        <div class="project">
+          <div class="project-header">
+            <span class="project-name">Data Pipeline Platform</span>
+            <span class="project-year">2024</span>
+          </div>
+          <div class="project-desc">Real-time ingestion engine processing 2M+ events/day with sub-second latency.</div>
+          <div class="project-tech">
+            <span class="tech-tag">Go</span>
+            <span class="tech-tag">Kafka</span>
+            <span class="tech-tag">ClickHouse</span>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-header">
+            <span class="project-name">Neural Portfolio</span>
+            <span class="project-year">2025</span>
+          </div>
+          <div class="project-desc">This site — a 3D brain visualization built with React Three Fiber.</div>
+          <div class="project-tech">
+            <span class="tech-tag">Next.js</span>
+            <span class="tech-tag">Three.js</span>
+            <span class="tech-tag">GLSL</span>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-header">
+            <span class="project-name">ML Recommendation Engine</span>
+            <span class="project-year">2024</span>
+          </div>
+          <div class="project-desc">Content recommendation system serving personalized feeds to 500K users.</div>
+          <div class="project-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">TensorFlow</span>
+            <span class="tech-tag">Redis</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="sub-heading">// skills</div>
+        <div class="skills-grid">
+          <span class="skill">React</span>
+          <span class="skill">TypeScript</span>
+          <span class="skill">Node.js</span>
+          <span class="skill">Python</span>
+          <span class="skill">Go</span>
+          <span class="skill">Three.js</span>
+          <span class="skill">PostgreSQL</span>
+          <span class="skill">AWS</span>
+          <span class="skill">Docker</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

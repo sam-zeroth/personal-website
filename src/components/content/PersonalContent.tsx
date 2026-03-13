@@ -47,7 +47,7 @@ export default function PersonalContent() {
 
       <ConnectionDivider color={COLOR} />
 
-      <motion.div variants={fadeUp} className="mb-2">
+      <motion.div variants={fadeUp} style={{ marginBottom: 28 }}>
         <p className="text-[13px] text-gray-600 leading-relaxed">
           Builder, thinker, and maker. I love creating things at the
           intersection of technology and human experience. This brain portfolio
@@ -61,7 +61,8 @@ export default function PersonalContent() {
         <motion.div
           key={item.period}
           variants={fadeUp}
-          className="p-5 rounded-xl bg-gray-50/80 mb-5 border-l-[3px] border-transparent hover:border-l-[#7b2ff7] transition-all"
+          className="rounded-xl bg-gray-50/80 border-l-[3px] border-transparent hover:border-l-[#7b2ff7] transition-all"
+          style={{ padding: 16, marginBottom: 10 }}
         >
           <span className="text-[10px] font-mono font-medium tracking-wider uppercase text-[#7b2ff7]">
             {item.period}

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writings Drawer — Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Geist', -apple-system, sans-serif;
+    background: #f5f5f5;
+    color: #1a1a2e;
+  }
+
+  /* Simulated brain scene behind */
+  .scene-bg {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at 40% 50%, #f0f0f5 0%, #e8e8ee 100%);
+    z-index: 0;
+  }
+
+  /* ── Drawer Panel ── */
+  .drawer {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 480px;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(20px);
+    z-index: 20;
+    overflow-y: auto;
+    box-shadow: -1px 0 0 rgba(0,0,0,0.04);
+  }
+
+  .drawer::-webkit-scrollbar { width: 4px; }
+  .drawer::-webkit-scrollbar-track { background: transparent; }
+  .drawer::-webkit-scrollbar-thumb { background: rgba(255,0,110,0.2); border-radius: 2px; }
+
+  .drawer-inner {
+    padding: 40px 40px 48px;
+    position: relative;
+  }
+
+  /* Neural decoration (matches existing) */
+  .neural-deco {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 180px;
+    height: 180px;
+    opacity: 0.05;
+  }
+
+  /* Close button */
+  .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.15s;
+  }
+  .close-btn:hover { background: #f3f3f5; }
+
+  /* ── Header (matches existing DrawerHeader pattern) ── */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .header-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,0,110,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 14px;
+  }
+
+  .header-icon-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #ff006e;
+  }
+
+  .header-lobe {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #ff006e;
+  }
+
+  .header-title {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #111;
+    margin-top: 2px;
+  }
+
+  .header-subtitle {
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+  }
+
+  /* ── Divider (matches ConnectionDivider) ── */
+  .divider {
+    height: 1px;
+    background: #e8e8ee;
+    margin: 32px 0;
+    position: relative;
+  }
+
+  .divider::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -3px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ff006e;
+  }
+
+  .divider::after {
+    content: '';
+    position: absolute;
+    left: 72px;
+    top: -2px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255,0,110,0.3);
+  }
+
+  /* ── Section label (matches SubHeading) ── */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #999;
+    margin-bottom: 16px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #ff006e;
+    flex-shrink: 0;
+  }
+
+  /* ── Post Card ── */
+  .post-card {
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    background: rgba(248,248,250,0.8);
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+  }
+
+  .post-card:hover {
+    border-left-color: #ff006e;
+    background: rgba(248,248,250,1);
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .post-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #e2e2e6;
+    color: #888;
+    font-family: 'Geist Mono', monospace;
+  }
+
+  .post-date {
+    font-size: 10px;
+    font-family: 'Geist Mono', monospace;
+    color: #aaa;
+  }
+
+  .post-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+    letter-spacing: -0.01em;
+    transition: color 0.15s;
+    line-height: 1.35;
+  }
+
+  .post-card:hover .post-title { color: #ff006e; }
+
+  .post-excerpt {
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
+    line-height: 1.55;
+  }
+
+  .post-reading-time {
+    font-size: 10px;
+    font-family: 'Geist Mono', monospace;
+    color: #bbb;
+    margin-top: 8px;
+  }
+
+  /* ── Bottom fade ── */
+  .more-text {
+    text-align: center;
+    font-size: 11px;
+    color: #bbb;
+    margin-top: 16px;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 639px) {
+    .drawer {
+      width: 100%;
+    }
+    .drawer-inner {
+      padding: 24px 20px 32px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="scene-bg"></div>
+
+<div class="drawer">
+  <!-- Neural decoration SVG -->
+  <svg class="neural-deco" viewBox="0 0 200 200">
+    <circle cx="160" cy="30" r="2.5" fill="#ff006e"/>
+    <circle cx="180" cy="55" r="2" fill="#ff006e"/>
+    <circle cx="140" cy="60" r="2" fill="#ff006e"/>
+    <circle cx="170" cy="85" r="2.5" fill="#ff006e"/>
+    <circle cx="150" cy="42" r="1.5" fill="#ff006e"/>
+    <circle cx="192" cy="72" r="1.5" fill="#ff006e"/>
+    <circle cx="128" cy="28" r="2" fill="#ff006e"/>
+    <line x1="160" y1="30" x2="180" y2="55" stroke="#ff006e" stroke-width="0.6"/>
+    <line x1="180" y1="55" x2="170" y2="85" stroke="#ff006e" stroke-width="0.6"/>
+    <line x1="140" y1="60" x2="170" y2="85" stroke="#ff006e" stroke-width="0.6"/>
+    <line x1="160" y1="30" x2="140" y2="60" stroke="#ff006e" stroke-width="0.6"/>
+    <line x1="150" y1="42" x2="180" y2="55" stroke="#ff006e" stroke-width="0.6"/>
+    <line x1="128" y1="28" x2="160" y2="30" stroke="#ff006e" stroke-width="0.6"/>
+  </svg>
+
+  <!-- Close button -->
+  <button class="close-btn">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <line x1="2" y1="2" x2="12" y2="12"/>
+      <line x1="12" y1="2" x2="2" y2="12"/>
+    </svg>
+  </button>
+
+  <div class="drawer-inner">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-icon">
+        <div class="header-icon-dot"></div>
+      </div>
+      <div>
+        <div class="header-lobe">Temporal Lobe</div>
+        <h2 class="header-title">Writings</h2>
+        <p class="header-subtitle">Language processing, memory & expression</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Recent</div>
+
+    <!-- Post 1 -->
+    <a class="post-card" href="#">
+      <div class="post-meta">
+        <span class="post-tag">Essay</span>
+        <span class="post-date">Mar 2025</span>
+      </div>
+      <div class="post-title">On Building in Public</div>
+      <p class="post-excerpt">Why sharing your process is more valuable than polishing your product. Lessons from a year of working with the garage door up.</p>
+      <div class="post-reading-time">6 min read</div>
+    </a>
+
+    <!-- Post 2 -->
+    <a class="post-card" href="#">
+      <div class="post-meta">
+        <span class="post-tag">Blog</span>
+        <span class="post-date">Feb 2025</span>
+      </div>
+      <div class="post-title">The Architecture of Thought</div>
+      <p class="post-excerpt">How neural networks mirror the way we organize ideas and make connections between disparate concepts.</p>
+      <div class="post-reading-time">8 min read</div>
+    </a>
+
+    <!-- Post 3 -->
+    <a class="post-card" href="#">
+      <div class="post-meta">
+        <span class="post-tag">Technical</span>
+        <span class="post-date">Jan 2025</span>
+      </div>
+      <div class="post-title">Three.js Performance Tips</div>
+      <p class="post-excerpt">Lessons learned from building a 3D brain visualization for the web — instancing, LOD, and shader tricks.</p>
+      <div class="post-reading-time">12 min read</div>
+    </a>
+
+    <!-- Post 4 -->
+    <a class="post-card" href="#">
+      <div class="post-meta">
+        <span class="post-tag">Essay</span>
+        <span class="post-date">Dec 2024</span>
+      </div>
+      <div class="post-title">Design as Communication</div>
+      <p class="post-excerpt">Every pixel is a word. Every interaction is a sentence. Every experience tells a story.</p>
+      <div class="post-reading-time">5 min read</div>
+    </a>
+
+    <!-- Post 5 -->
+    <a class="post-card" href="#">
+      <div class="post-meta">
+        <span class="post-tag">Technical</span>
+        <span class="post-date">Nov 2024</span>
+      </div>
+      <div class="post-title">Go Concurrency Patterns I Actually Use</div>
+      <p class="post-excerpt">Beyond goroutines and channels — practical patterns for building reliable concurrent systems.</p>
+      <div class="post-reading-time">10 min read</div>
+    </a>
+
+    <p class="more-text">Older writings in the archive...</p>
+
+  </div>
+</div>
+
+</body>
+</html>

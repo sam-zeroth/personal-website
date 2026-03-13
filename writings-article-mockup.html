@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Article Reading View — Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Geist', -apple-system, sans-serif;
+    background: #fff;
+    color: #1a1a2e;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Top bar ── */
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px 12px 6px 8px;
+    border-radius: 8px;
+    transition: all 0.15s;
+  }
+
+  .back-btn:hover {
+    color: #ff006e;
+    background: rgba(255,0,110,0.04);
+  }
+
+  .back-arrow {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Progress bar at top */
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: #ff006e;
+    z-index: 100;
+    width: 35%;
+    transition: width 0.1s;
+  }
+
+  /* ── Article ── */
+  article {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 112px 24px 120px;
+  }
+
+  /* Article header */
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .article-tag {
+    font-size: 11px;
+    font-family: 'Geist Mono', monospace;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 4px;
+    border: 1px solid #e8e8ee;
+    color: #888;
+  }
+
+  .article-date {
+    font-size: 12px;
+    font-family: 'Geist Mono', monospace;
+    color: #aaa;
+  }
+
+  .article-reading-time {
+    font-size: 12px;
+    font-family: 'Geist Mono', monospace;
+    color: #ccc;
+  }
+
+  .meta-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #ddd;
+  }
+
+  h1 {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    color: #111;
+    margin-bottom: 16px;
+  }
+
+  .article-subtitle {
+    font-size: 18px;
+    font-weight: 400;
+    color: #777;
+    line-height: 1.5;
+    margin-bottom: 40px;
+  }
+
+  /* Thin rule */
+  .article-rule {
+    height: 1px;
+    background: #eee;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .article-rule::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -2.5px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff006e;
+  }
+
+  /* ── Body text ── */
+  .article-body p {
+    font-size: 17px;
+    line-height: 1.75;
+    color: #333;
+    margin-bottom: 28px;
+    font-weight: 400;
+  }
+
+  .article-body p:first-child::first-letter {
+    font-size: 52px;
+    font-weight: 700;
+    float: left;
+    line-height: 1;
+    margin-right: 8px;
+    margin-top: 4px;
+    color: #111;
+  }
+
+  .article-body a {
+    color: #ff006e;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,0,110,0.2);
+    transition: border-color 0.15s;
+  }
+
+  .article-body a:hover {
+    border-bottom-color: #ff006e;
+  }
+
+  .article-body h2 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #111;
+    margin-top: 48px;
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+
+  .article-body h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #222;
+    margin-top: 36px;
+    margin-bottom: 16px;
+  }
+
+  .article-body blockquote {
+    border-left: 2px solid #ff006e;
+    padding-left: 20px;
+    margin: 32px 0;
+    font-style: italic;
+    color: #555;
+  }
+
+  .article-body blockquote p {
+    font-size: 17px;
+    color: #555;
+    margin-bottom: 0;
+  }
+
+  /* Code blocks */
+  .article-body code {
+    font-family: 'Geist Mono', monospace;
+    font-size: 14px;
+    background: #f6f6f8;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #444;
+  }
+
+  .article-body pre {
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 28px 0;
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+
+  .article-body pre code {
+    background: none;
+    padding: 0;
+    font-size: 13px;
+    color: #333;
+  }
+
+  /* Image placeholder */
+  .article-body figure {
+    margin: 40px -24px;
+    text-align: center;
+  }
+
+  .article-body figure img,
+  .article-body figure .img-placeholder {
+    width: 100%;
+    border-radius: 8px;
+    background: #f4f4f6;
+    display: block;
+  }
+
+  .img-placeholder {
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+    font-size: 13px;
+    font-family: 'Geist Mono', monospace;
+  }
+
+  .article-body figcaption {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  /* Lists */
+  .article-body ul, .article-body ol {
+    margin: 20px 0 28px 20px;
+  }
+
+  .article-body li {
+    font-size: 17px;
+    line-height: 1.75;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  .article-body li::marker {
+    color: #ddd;
+  }
+
+  /* Emphasis / strong */
+  .article-body strong {
+    font-weight: 600;
+    color: #111;
+  }
+
+  .article-body em {
+    font-style: italic;
+    color: #444;
+  }
+
+  /* ── Footer ── */
+  .article-footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid #eee;
+  }
+
+  .article-footer-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .nav-link {
+    font-size: 13px;
+    color: #888;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    transition: color 0.15s;
+  }
+
+  .nav-link:hover { color: #ff006e; }
+
+  .nav-link-label {
+    font-size: 10px;
+    font-family: 'Geist Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #bbb;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .nav-link-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+  }
+
+  .nav-link:hover .nav-link-title { color: #ff006e; }
+
+  .nav-link.next { text-align: right; }
+
+  /* ── Mobile ── */
+  @media (max-width: 639px) {
+    h1 { font-size: 28px; }
+
+    .article-subtitle { font-size: 16px; }
+
+    article { padding: 96px 20px 80px; }
+
+    .article-body p { font-size: 16px; }
+
+    .article-body h2 { font-size: 20px; }
+
+    .article-body figure { margin: 32px -20px; }
+
+    .article-body p:first-child::first-letter {
+      font-size: 44px;
+    }
+
+    .article-body pre {
+      padding: 16px;
+      margin: 24px -20px;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Reading progress bar -->
+<div class="reading-progress"></div>
+
+<!-- Top bar -->
+<nav class="topbar">
+  <button class="back-btn">
+    <svg class="back-arrow" viewBox="0 0 16 16">
+      <path d="M10 3L5 8L10 13"/>
+    </svg>
+    Writings
+  </button>
+</nav>
+
+<!-- Article -->
+<article>
+
+  <div class="article-meta">
+    <span class="article-tag">Essay</span>
+    <span class="meta-dot"></span>
+    <span class="article-date">Mar 12, 2025</span>
+    <span class="meta-dot"></span>
+    <span class="article-reading-time">6 min read</span>
+  </div>
+
+  <h1>On Building in Public</h1>
+
+  <p class="article-subtitle">Why sharing your process is more valuable than polishing your product. Lessons from a year of working with the garage door up.</p>
+
+  <div class="article-rule"></div>
+
+  <div class="article-body">
+    <p>There is a particular kind of anxiety that comes with publishing work before it feels ready. The half-formed thought, the rough prototype, the essay that hasn't quite found its thesis — these feel dangerous to share. We've been trained to present finished work, polished surfaces, confident conclusions. But I've come to believe that the unfinished is where the interesting things happen.</p>
+
+    <p>For the past year, I've been experimenting with what some people call <a href="#">building in public</a>. The concept is simple: share your process, not just your product. Document the messy middle. Let people see the decisions, the dead ends, the moments of doubt. What I've found has surprised me.</p>
+
+    <h2>The feedback loop changes everything</h2>
+
+    <p>When you share work in progress, you create a feedback loop that fundamentally alters the trajectory of what you're building. People don't just comment on what exists — they reveal possibilities you hadn't considered.</p>
+
+    <blockquote>
+      <p>The best ideas I've had this year came not from sitting alone with a whiteboard, but from someone responding to a half-baked post with "have you thought about..."</p>
+    </blockquote>
+
+    <p>This is different from the kind of feedback you get on finished work. When something is done, feedback becomes critique. When something is in progress, feedback becomes <strong>collaboration</strong>. The psychological framing shifts entirely.</p>
+
+    <h2>What I actually share</h2>
+
+    <p>Not everything needs to be public. I've developed a rough framework for what to share and what to keep private:</p>
+
+    <ul>
+      <li><strong>Technical decisions</strong> — why I chose one architecture over another, trade-offs I'm weighing</li>
+      <li><strong>Design explorations</strong> — early mockups, rejected directions, the reasoning behind visual choices</li>
+      <li><strong>Problems I'm stuck on</strong> — the specific blockers, not vague complaints</li>
+      <li><strong>Metrics and outcomes</strong> — what happened after shipping, what I learned</li>
+    </ul>
+
+    <p>What I don't share: personal frustrations, internal team dynamics, anything that would compromise someone's trust. The line is "would I be comfortable if my coworker saw this?" If yes, it's fair game.</p>
+
+    <h2>The technical side</h2>
+
+    <p>If you're curious about the implementation, here's a simple pattern I use for tracking build-in-public content alongside code:</p>
+
+    <pre><code>// devlog.config.ts
+export const devlog = {
+  entries: [
+    {
+      date: '2025-03-10',
+      type: 'decision',
+      title: 'Switched from REST to tRPC',
+      body: 'Type safety across the stack...',
+      relatedCommits: ['a1b2c3d'],
+    }
+  ]
+}</code></pre>
+
+    <p>It's nothing fancy — just a structured way to connect narrative to code. The <code>relatedCommits</code> field lets me link decisions back to the actual changes, which has been invaluable for onboarding new contributors.</p>
+
+    <figure>
+      <div class="img-placeholder">[image placeholder — commit graph visualization]</div>
+      <figcaption>A visualization of how public devlog entries correlate with commit activity</figcaption>
+    </figure>
+
+    <h2>The uncomfortable truth</h2>
+
+    <p>Building in public is not really about marketing, or building an audience, or any of the other reasons people usually give. It's about <strong>thinking more clearly</strong>. When you know someone might read your reasoning, you reason better. When you know you'll have to explain a decision, you make better decisions.</p>
+
+    <p>The audience is a side effect. The clarity is the point.</p>
+
+    <p>I don't know if I'll keep doing this forever. But a year in, the evidence is clear: the things I've built in public are measurably better than the things I've built in private. Not because of the feedback (though that helps), but because of the discipline that comes from working with the garage door up.</p>
+  </div>
+
+  <!-- Article footer nav -->
+  <div class="article-footer">
+    <div class="article-footer-nav">
+      <a href="#" class="nav-link prev">
+        <div>
+          <span class="nav-link-label">Previous</span>
+          <span class="nav-link-title">Design as Communication</span>
+        </div>
+      </a>
+      <a href="#" class="nav-link next">
+        <div>
+          <span class="nav-link-label">Next</span>
+          <span class="nav-link-title">The Architecture of Thought</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</article>
+
+<script>
+  // Simulated reading progress
+  window.addEventListener('scroll', () => {
+    const bar = document.querySelector('.reading-progress');
+    const article = document.querySelector('article');
+    const rect = article.getBoundingClientRect();
+    const total = article.scrollHeight - window.innerHeight;
+    const scrolled = -rect.top;
+    const pct = Math.min(Math.max(scrolled / total * 100, 0), 100);
+    bar.style.width = pct + '%';
+  });
+</script>
+
+</body>
+</html>

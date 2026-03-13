@@ -44,7 +44,8 @@ export default function ContentPanel() {
           {/* Close button */}
           <button
             onClick={goHome}
-            className="absolute top-5 right-5 z-10 w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors cursor-pointer"
+            className="absolute z-10 w-7 h-7 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors cursor-pointer"
+            style={{ top: 18, right: 18 }}
           >
             <svg
               width="14"
@@ -60,7 +61,10 @@ export default function ContentPanel() {
             </svg>
           </button>
 
-          <div className="relative px-10 py-10 pt-10">
+          <div
+            className="relative"
+            style={{ padding: "32px 30px 28px" }}
+          >
             <Content />
           </div>
         </motion.div>

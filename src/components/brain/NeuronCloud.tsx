@@ -216,13 +216,13 @@ function buildConnections(neurons: Neuron[]): ConnectionData {
 // On hover: saturate to full color. Others fade to very light grey.
 const dotVertexShader = `
   attribute float regionId;
+  uniform float uPixelRatio;
   varying float vRegionId;
 
   void main() {
     vRegionId = regionId;
     vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
-    // Small dots — ~3-5px on screen
-    gl_PointSize = max(1.5, 4.0 * (10.0 / -mvPos.z));
+    gl_PointSize = max(1.5, 4.0 * uPixelRatio * (10.0 / -mvPos.z));
     gl_Position = projectionMatrix * mvPos;
   }
 `;
@@ -385,6 +385,7 @@ export default function NeuronCloud() {
         uColors: { value: brainRegions.map((r) => new THREE.Vector3(...r.colorVec)) },
         uOpacity: { value: 1.0 },
         uTime: { value: 0.0 },
+        uPixelRatio: { value: 1.0 },
       },
     });
 
@@ -441,6 +442,7 @@ export default function NeuronCloud() {
       dotMat.uniforms.uHoveredRegion.value = hovIdx;
       dotMat.uniforms.uActiveRegion.value = actIdx;
       dotMat.uniforms.uTime.value = state.clock.elapsedTime;
+      dotMat.uniforms.uPixelRatio.value = state.gl.getPixelRatio();
       dotMat.uniforms.uOpacity.value +=
         (targetOpacity - dotMat.uniforms.uOpacity.value) * 0.08;
     }

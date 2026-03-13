@@ -28,13 +28,17 @@ export default function BrainRegionHitZones() {
               onPointerOver={() => {
                 if (!isZoomed) {
                   setHoveredRegion(region.id);
-                  document.body.style.cursor = "pointer";
+                  if (window.matchMedia("(pointer: fine)").matches) {
+                    document.body.style.cursor = "pointer";
+                  }
                 }
               }}
               onPointerOut={() => {
                 if (hoveredRegion === region.id) {
                   setHoveredRegion(null);
-                  document.body.style.cursor = "default";
+                  if (window.matchMedia("(pointer: fine)").matches) {
+                    document.body.style.cursor = "default";
+                  }
                 }
               }}
             >

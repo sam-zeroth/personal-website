@@ -49,14 +49,18 @@ export function NeuralDecoration({ color }: { color: string }) {
 // Connection-line divider with node dots
 export function ConnectionDivider({ color }: { color: string }) {
   return (
-    <motion.div variants={fadeUp} className="relative my-14 h-px bg-gray-100">
+    <motion.div
+      variants={fadeUp}
+      className="relative h-px"
+      style={{ background: "#e8e8ee", margin: "24px 0" }}
+    >
       <div
-        className="absolute left-0 -top-[3px] w-[7px] h-[7px] rounded-full"
-        style={{ background: color }}
+        className="absolute rounded-full"
+        style={{ background: color, width: 7, height: 7, left: 0, top: -3 }}
       />
       <div
-        className="absolute left-[72px] -top-[2px] w-[5px] h-[5px] rounded-full"
-        style={{ background: `${color}50` }}
+        className="absolute rounded-full"
+        style={{ background: `${color}50`, width: 5, height: 5, left: 72, top: -2 }}
       />
     </motion.div>
   );
@@ -73,18 +77,19 @@ export function SubHeading({
   return (
     <motion.h3
       variants={fadeUp}
-      className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.06em] uppercase text-gray-400 mb-6"
+      className="flex items-center text-[11px] font-semibold tracking-[0.06em] uppercase text-gray-400"
+      style={{ marginBottom: 14, gap: 8 }}
     >
       <span
-        className="w-1 h-1 rounded-full flex-shrink-0"
-        style={{ background: color }}
+        className="rounded-full flex-shrink-0"
+        style={{ background: color, width: 4, height: 4 }}
       />
       {children}
     </motion.h3>
   );
 }
 
-// Drawer header with icon circle
+// Drawer header — icon circle vertically centered with title
 export function DrawerHeader({
   lobe,
   lobeFunction,
@@ -97,27 +102,40 @@ export function DrawerHeader({
   color: string;
 }) {
   return (
-    <motion.div variants={fadeUp} className="flex items-start gap-4">
+    <motion.div variants={fadeUp} className="flex items-start" style={{ gap: 14 }}>
       <div
-        className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-        style={{ background: `${color}12` }}
+        className="rounded-full flex items-center justify-center flex-shrink-0"
+        style={{
+          background: `${color}12`,
+          width: 40,
+          height: 40,
+          marginTop: 19,
+        }}
       >
         <div
-          className="w-2.5 h-2.5 rounded-full"
-          style={{ background: color }}
+          className="rounded-full"
+          style={{ background: color, width: 10, height: 10 }}
         />
       </div>
       <div>
         <span
-          className="text-[10px] font-medium tracking-[0.1em] uppercase"
-          style={{ color }}
+          className="font-medium uppercase"
+          style={{ color, fontSize: 10, letterSpacing: "0.1em" }}
         >
           {lobe}
         </span>
-        <h2 className="text-[22px] font-bold tracking-tight leading-tight mt-0.5 text-gray-900">
+        <h2
+          className="font-bold tracking-tight leading-tight text-gray-900"
+          style={{ fontSize: 22, letterSpacing: "-0.03em", marginTop: 1 }}
+        >
           {title}
         </h2>
-        <p className="text-[11px] text-gray-400 mt-1">{lobeFunction}</p>
+        <p
+          className="text-gray-400"
+          style={{ fontSize: 11, marginTop: 2 }}
+        >
+          {lobeFunction}
+        </p>
       </div>
     </motion.div>
   );

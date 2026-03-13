@@ -69,7 +69,8 @@ export default function ContactContent() {
 
       <motion.p
         variants={fadeUp}
-        className="text-[13px] text-gray-600 leading-relaxed mb-2"
+        className="text-[13px] text-gray-600 leading-relaxed"
+        style={{ marginBottom: 28 }}
       >
         Always open to interesting conversations, collaborations, and new
         opportunities. Feel free to reach out.
@@ -77,7 +78,7 @@ export default function ContactContent() {
 
       <SubHeading color={COLOR}>Channels</SubHeading>
 
-      <div className="space-y-4">
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {links.map((link) => (
           <motion.a
             key={link.label}
@@ -85,7 +86,8 @@ export default function ContactContent() {
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-4 p-5 rounded-xl bg-gray-50/80 border-l-[3px] border-transparent hover:border-l-[#00e676] transition-all group"
+            className="flex items-center rounded-xl bg-gray-50/80 border-l-[3px] border-transparent hover:border-l-[#00e676] transition-all group"
+            style={{ padding: "14px 16px", gap: 14 }}
           >
             <div className="text-gray-400 group-hover:text-[#00c864] transition-colors">
               {link.icon}

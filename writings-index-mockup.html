@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writings Index — Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Geist', -apple-system, sans-serif;
+    background: #fff;
+    color: #1a1a2e;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Top bar ── */
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px 12px 6px 8px;
+    border-radius: 8px;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+
+  .back-btn:hover {
+    color: #ff006e;
+    background: rgba(255,0,110,0.04);
+  }
+
+  .back-arrow {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── Main content ── */
+  .content {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 112px 24px 120px;
+  }
+
+  /* Page header */
+  .page-title {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #111;
+    margin-bottom: 8px;
+  }
+
+  .page-description {
+    font-size: 15px;
+    color: #999;
+    line-height: 1.5;
+    margin-bottom: 48px;
+  }
+
+  /* ── Year group ── */
+  .year-label {
+    font-size: 12px;
+    font-family: 'Geist Mono', monospace;
+    font-weight: 500;
+    color: #ccc;
+    letter-spacing: 0.04em;
+    margin-bottom: 16px;
+    padding-left: 1px;
+  }
+
+  .year-group {
+    margin-bottom: 48px;
+  }
+
+  /* ── Post row ── */
+  .post-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f4f4f6;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+
+  .post-row:first-child {
+    border-top: 1px solid #f4f4f6;
+  }
+
+  .post-row:hover {
+    background: rgba(255,0,110,0.015);
+    margin: 0 -16px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border-color: transparent;
+  }
+
+  .post-row:hover + .post-row {
+    border-top-color: transparent;
+  }
+
+  .post-row-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #222;
+    flex: 1;
+    transition: color 0.15s;
+    line-height: 1.4;
+  }
+
+  .post-row:hover .post-row-title {
+    color: #ff006e;
+  }
+
+  .post-row-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .post-row-tag {
+    font-size: 10px;
+    font-family: 'Geist Mono', monospace;
+    color: #bbb;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .post-row-date {
+    font-size: 11px;
+    font-family: 'Geist Mono', monospace;
+    color: #ccc;
+    min-width: 56px;
+    text-align: right;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 639px) {
+    .content { padding: 96px 20px 80px; }
+    .page-title { font-size: 26px; }
+
+    .post-row {
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 0;
+    }
+
+    .post-row:hover {
+      padding: 12px 16px;
+    }
+
+    .post-row-meta {
+      order: -1;
+    }
+
+    .post-row-title { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<nav class="topbar">
+  <a href="#" class="back-btn">
+    <svg class="back-arrow" viewBox="0 0 16 16">
+      <path d="M10 3L5 8L10 13"/>
+    </svg>
+    Home
+  </a>
+</nav>
+
+<div class="content">
+
+  <h1 class="page-title">Writings</h1>
+  <p class="page-description">Essays, technical posts, and things I'm thinking about.</p>
+
+  <!-- 2025 -->
+  <div class="year-group">
+    <div class="year-label">2025</div>
+    <a href="#" class="post-row">
+      <span class="post-row-title">On Building in Public</span>
+      <div class="post-row-meta">
+        <span class="post-row-tag">Essay</span>
+        <span class="post-row-date">Mar 12</span>
+      </div>
+    </a>
+    <a href="#" class="post-row">
+      <span class="post-row-title">The Architecture of Thought</span>
+      <div class="post-row-meta">
+        <span class="post-row-tag">Blog</span>
+        <span class="post-row-date">Feb 20</span>
+      </div>
+    </a>
+    <a href="#" class="post-row">
+      <span class="post-row-title">Three.js Performance Tips</span>
+      <div class="post-row-meta">
+        <span class="post-row-tag">Technical</span>
+        <span class="post-row-date">Jan 8</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 2024 -->
+  <div class="year-group">
+    <div class="year-label">2024</div>
+    <a href="#" class="post-row">
+      <span class="post-row-title">Design as Communication</span>
+      <div class="post-row-meta">
+        <span class="post-row-tag">Essay</span>
+        <span class="post-row-date">Dec 14</span>
+      </div>
+    </a>
+    <a href="#" class="post-row">
+      <span class="post-row-title">Go Concurrency Patterns I Actually Use</span>
+      <div class="post-row-meta">
+        <span class="post-row-tag">Technical</span>
+        <span class="post-row-date">Nov 3</span>
+      </div>
+    </a>
+    <a href="#" class="post-row">
+      <span class="post-row-title">Why I Stopped Using Component Libraries</span>
+      <div class="post-row-meta">
+        <span class="post-row-tag">Blog</span>
+        <span class="post-row-date">Sep 22</span>
+      </div>
+    </a>
+    <a href="#" class="post-row">
+      <span class="post-row-title">The Case for Boring Technology</span>
+      <div class="post-row-meta">
+        <span class="post-row-tag">Essay</span>
+        <span class="post-row-date">Jul 15</span>
+      </div>
+    </a>
+  </div>
+
+</div>
+
+</body>
+</html>
