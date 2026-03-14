@@ -119,7 +119,8 @@ export default function ContactContent() {
 
       <motion.div
         variants={fadeUp}
-        className="p-5 rounded-xl bg-[#00e67608] border border-[#00e67618]"
+        className="rounded-xl bg-[#00e67608] border border-[#00e67618]"
+        style={{ padding: 20 }}
       >
         <h3 className="text-[13px] font-semibold text-[#00a854] mb-1.5">
           Let&apos;s build something together

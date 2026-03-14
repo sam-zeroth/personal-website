@@ -22,21 +22,6 @@ const projects = [
   },
 ];
 
-const skills = [
-  "React",
-  "TypeScript",
-  "Next.js",
-  "Node.js",
-  "Python",
-  "Go",
-  "Three.js",
-  "PostgreSQL",
-  "AWS",
-  "Docker",
-  "Figma",
-  "Git",
-];
-
 export default function WorkContent() {
   return (
     <motion.div variants={stagger} initial="initial" animate="animate">
@@ -103,20 +88,6 @@ export default function WorkContent() {
         );
       })}
 
-      <ConnectionDivider color={COLOR} />
-
-      <SubHeading color={COLOR}>Skills</SubHeading>
-
-      <motion.div variants={fadeUp} className="flex flex-wrap gap-2">
-        {skills.map((skill) => (
-          <span
-            key={skill}
-            className="px-3.5 py-1.5 text-[12px] rounded-full border border-gray-200 text-gray-500 hover:border-[#00d4ff80] hover:bg-[#00d4ff08] hover:text-[#0099bb] transition-all cursor-default"
-          >
-            {skill}
-          </span>
-        ))}
-      </motion.div>
     </motion.div>
   );
 }

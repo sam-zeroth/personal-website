@@ -34,17 +34,6 @@ const timeline = [
   },
 ];
 
-const interests = [
-  "Philosophy of Mind",
-  "Computational Science",
-  "Logic",
-  "Basketball",
-  "Reading",
-  "AI & ML",
-  "Tinkering",
-  "Writing",
-];
-
 export default function PersonalContent() {
   return (
     <motion.div variants={stagger} initial="initial" animate="animate">
@@ -105,20 +94,6 @@ export default function PersonalContent() {
         </motion.div>
       ))}
 
-      <ConnectionDivider color={COLOR} />
-
-      <SubHeading color={COLOR}>Interests</SubHeading>
-
-      <motion.div variants={fadeUp} className="flex flex-wrap gap-2">
-        {interests.map((interest) => (
-          <span
-            key={interest}
-            className="px-3.5 py-1.5 text-[12px] rounded-full border border-gray-200 text-gray-500 hover:border-[#7b2ff780] hover:bg-[#7b2ff708] hover:text-[#6020d0] transition-all cursor-default"
-          >
-            {interest}
-          </span>
-        ))}
-      </motion.div>
     </motion.div>
   );
 }
