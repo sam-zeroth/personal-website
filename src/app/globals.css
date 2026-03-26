@@ -11,7 +11,7 @@
   --logo-top: 16px;
   --logo-left: 16px;
   --logo-size: 36px;
-  --logo-size-h: 35px;
+  --logo-size-h: 36px;
 }
 
 @media (min-width: 640px) {
@@ -19,7 +19,7 @@
     --logo-top: 28px;
     --logo-left: 28px;
     --logo-size: 42px;
-    --logo-size-h: 40px;
+    --logo-size-h: 42px;
   }
 }
 
@@ -96,21 +96,21 @@ body {
   }
 }
 
-/* SVG Logo Trace Animation */
-@keyframes tracePath {
+/* SVG Logo Reveal Animation */
+@keyframes revealPath {
   0% {
-    stroke-dashoffset: var(--path-length);
+    clip-path: inset(0 100% 0 0);
     opacity: 0.3;
   }
   10% {
     opacity: 1;
   }
   70% {
-    stroke-dashoffset: 0;
+    clip-path: inset(0 0% 0 0);
     opacity: 1;
   }
   100% {
-    stroke-dashoffset: 0;
+    clip-path: inset(0 0% 0 0);
     opacity: 1;
   }
 }
@@ -135,9 +135,8 @@ body {
 }
 
 .logo-trace-path {
-  stroke-dasharray: var(--path-length);
-  stroke-dashoffset: var(--path-length);
-  animation: tracePath var(--duration) var(--delay) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  clip-path: inset(0 100% 0 0);
+  animation: revealPath var(--duration) var(--delay) cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* ═══════════════════════════════════════════
