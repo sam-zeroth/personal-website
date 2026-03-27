@@ -565,3 +565,20 @@ body {
 
   .writings-post-row-title { font-size: 14px; }
 }
+
+/* --- Scroll-driven brain animation --- */
+
+/* Mobile: floating modal bottom sheet */
+@media (max-width: 639px) {
+  .floating-modal-mobile {
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 85vh !important;
+    border-radius: 20px 20px 0 0 !important;
+    transform: none !important;
+  }
+}

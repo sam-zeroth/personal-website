@@ -7,6 +7,7 @@ import WorkContent from "@/components/content/WorkContent";
 import PersonalContent from "@/components/content/PersonalContent";
 import WritingsContent from "@/components/content/WritingsContent";
 import ContactContent from "@/components/content/ContactContent";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import type { ScrollSectionConfig } from "./scrollConfig";
 
 const contentMap: Record<string, React.ComponentType> = {
@@ -27,12 +28,20 @@ export default function FloatingModal({
   modalSide,
   visible,
 }: FloatingModalProps) {
+  const isMobile = useIsMobile(640);
   const Content = activeRegion ? contentMap[activeRegion] : null;
   const region = activeRegion
     ? brainRegions.find((r) => r.id === activeRegion)
     : null;
 
   const getMotionProps = () => {
+    if (isMobile) {
+      return {
+        initial: { opacity: 0, y: 100 },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: 100 },
+      };
+    }
     switch (modalSide) {
       case "right":
         return {
@@ -56,6 +65,9 @@ export default function FloatingModal({
   };
 
   const getPositionClasses = () => {
+    if (isMobile) {
+      return "floating-modal-mobile";
+    }
     switch (modalSide) {
       case "right":
         return "right-6 top-1/2 -translate-y-1/2 w-[380px] max-h-[80vh]";
