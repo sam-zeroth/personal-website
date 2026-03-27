@@ -131,11 +131,13 @@ body {
 
 .logo-trace-container {
   animation: traceGlow 2.4s ease-in-out forwards;
+  will-change: filter;
 }
 
 .logo-trace-path {
   clip-path: inset(0 100% 0 0);
   animation: revealPath var(--duration) var(--delay) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: clip-path, opacity;
 }
 
 /* ═══════════════════════════════════════════

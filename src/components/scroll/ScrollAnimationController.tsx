@@ -43,46 +43,32 @@ export default function ScrollAnimationController({
 
       const progress = scrollProgress;
 
-      if (progress <= 0.3) {
-        const t = progress / 0.3;
+      if (progress <= 0.25) {
+        // Transition in: lerp from previous section's position to this one
+        const t = progress / 0.25;
+        // Smooth ease for transition
+        const eased = t * t * (3 - 2 * t); // smoothstep
         const prev = getPreviousTarget(scrollPhase);
         targetPos.current.set(
-          THREE.MathUtils.lerp(prev.pos[0], currentSection.cameraPosition[0], t),
-          THREE.MathUtils.lerp(prev.pos[1], currentSection.cameraPosition[1], t),
-          THREE.MathUtils.lerp(prev.pos[2], currentSection.cameraPosition[2], t)
+          THREE.MathUtils.lerp(prev.pos[0], currentSection.cameraPosition[0], eased),
+          THREE.MathUtils.lerp(prev.pos[1], currentSection.cameraPosition[1], eased),
+          THREE.MathUtils.lerp(prev.pos[2], currentSection.cameraPosition[2], eased)
         );
         targetLookAt.current.set(
-          THREE.MathUtils.lerp(prev.look[0], currentSection.lookAt[0], t),
-          THREE.MathUtils.lerp(prev.look[1], currentSection.lookAt[1], t),
-          THREE.MathUtils.lerp(prev.look[2], currentSection.lookAt[2], t)
+          THREE.MathUtils.lerp(prev.look[0], currentSection.lookAt[0], eased),
+          THREE.MathUtils.lerp(prev.look[1], currentSection.lookAt[1], eased),
+          THREE.MathUtils.lerp(prev.look[2], currentSection.lookAt[2], eased)
         );
         targetBrainRotY.current = THREE.MathUtils.lerp(
           prev.rotY,
           currentSection.brainRotationY,
-          t
+          eased
         );
-      } else if (progress <= 0.8) {
+      } else {
+        // Hold at section position until next section takes over
         targetPos.current.set(...currentSection.cameraPosition);
         targetLookAt.current.set(...currentSection.lookAt);
         targetBrainRotY.current = currentSection.brainRotationY;
-      } else {
-        const t = (progress - 0.8) / 0.2;
-        const next = getNextTarget(scrollPhase);
-        targetPos.current.set(
-          THREE.MathUtils.lerp(currentSection.cameraPosition[0], next.pos[0], t),
-          THREE.MathUtils.lerp(currentSection.cameraPosition[1], next.pos[1], t),
-          THREE.MathUtils.lerp(currentSection.cameraPosition[2], next.pos[2], t)
-        );
-        targetLookAt.current.set(
-          THREE.MathUtils.lerp(currentSection.lookAt[0], next.look[0], t),
-          THREE.MathUtils.lerp(currentSection.lookAt[1], next.look[1], t),
-          THREE.MathUtils.lerp(currentSection.lookAt[2], next.look[2], t)
-        );
-        targetBrainRotY.current = THREE.MathUtils.lerp(
-          currentSection.brainRotationY,
-          next.rotY,
-          t
-        );
       }
     }
 
@@ -120,15 +106,3 @@ function getPreviousTarget(phase: string) {
   };
 }
 
-function getNextTarget(phase: string) {
-  const idx = scrollSections.findIndex((s) => s.phase === phase);
-  if (idx >= scrollSections.length - 1) {
-    return { pos: DEFAULT_CAMERA_POS, look: DEFAULT_LOOK_AT, rotY: 0 };
-  }
-  const next = scrollSections[idx + 1];
-  return {
-    pos: next.cameraPosition,
-    look: next.lookAt,
-    rotY: next.brainRotationY,
-  };
-}

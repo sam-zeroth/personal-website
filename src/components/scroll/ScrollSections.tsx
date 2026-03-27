@@ -27,7 +27,7 @@ export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
 
   const updateModal = useCallback((sectionIndex: number, progress: number) => {
     const section = scrollSections[sectionIndex];
-    const visible = progress > 0.3 && progress < 0.95;
+    const visible = progress > 0.25 && progress < 0.92;
     setModalState((prev) => {
       if (
         prev.region === section.region &&
