@@ -11,10 +11,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface ScrollSectionsProps {
   scrollEnabled: boolean;
-  scrollerRef: React.RefObject<HTMLElement | null>;
 }
 
-export default function ScrollSections({ scrollEnabled, scrollerRef }: ScrollSectionsProps) {
+export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const playgroundRef = useRef<HTMLDivElement>(null);
@@ -42,12 +41,8 @@ export default function ScrollSections({ scrollEnabled, scrollerRef }: ScrollSec
   }, []);
 
   useEffect(() => {
-    if (!scrollEnabled || !containerRef.current || !scrollerRef.current) return;
+    if (!scrollEnabled || !containerRef.current) return;
 
-    const scroller = scrollerRef.current;
-
-    // Tell ScrollTrigger to use our main element as the scroll container
-    ScrollTrigger.defaults({ scroller });
     ScrollTrigger.refresh();
 
     const triggers: ScrollTrigger[] = [];
@@ -58,7 +53,6 @@ export default function ScrollSections({ scrollEnabled, scrollerRef }: ScrollSec
 
       const trigger = ScrollTrigger.create({
         trigger: el,
-        scroller,
         start: "top top",
         end: "bottom top",
         scrub: 1,
@@ -77,7 +71,6 @@ export default function ScrollSections({ scrollEnabled, scrollerRef }: ScrollSec
     if (playgroundRef.current) {
       const playgroundTrigger = ScrollTrigger.create({
         trigger: playgroundRef.current,
-        scroller,
         start: "top center",
         onEnter: () => {
           useStore.getState().setScrollMode(false);

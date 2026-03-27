@@ -94,10 +94,16 @@ export default function Home() {
     return () => cancelAnimationFrame(rafId);
   }, [phase]);
 
-  // Lock scroll during intro, unlock after settled
+  // Lock body scroll during intro, unlock after settled
   useEffect(() => {
-    if (phase !== "settled") return;
-    const timer = setTimeout(() => setScrollEnabled(true), 100);
+    if (phase !== "settled") {
+      document.body.style.overflow = "hidden";
+      return;
+    }
+    const timer = setTimeout(() => {
+      document.body.style.overflow = "";
+      setScrollEnabled(true);
+    }, 100);
     return () => clearTimeout(timer);
   }, [phase]);
 
@@ -107,7 +113,7 @@ export default function Home() {
   return (
     <main
       ref={mainRef}
-      className={`relative bg-white h-dvh overflow-x-hidden ${scrollEnabled ? "overflow-y-auto" : "overflow-y-hidden"}`}
+      className="relative bg-white overflow-x-hidden"
     >
       {phase !== "settled" && phase !== "zooming" && (
         <div
@@ -156,7 +162,7 @@ export default function Home() {
         <BrainScene />
       </div>
 
-      {pageReady && <ScrollSections scrollEnabled={scrollEnabled} scrollerRef={mainRef} />}
+      {pageReady && <ScrollSections scrollEnabled={scrollEnabled} />}
 
       {phase === "settled" && scrollEnabled && scrollMode && (
         <ScrollIndicator />
