@@ -11,9 +11,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface ScrollSectionsProps {
   scrollEnabled: boolean;
+  scrollerRef: React.RefObject<HTMLElement | null>;
 }
 
-export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
+export default function ScrollSections({ scrollEnabled, scrollerRef }: ScrollSectionsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const playgroundRef = useRef<HTMLDivElement>(null);
@@ -41,8 +42,12 @@ export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
   }, []);
 
   useEffect(() => {
-    if (!scrollEnabled || !containerRef.current) return;
+    if (!scrollEnabled || !containerRef.current || !scrollerRef.current) return;
 
+    const scroller = scrollerRef.current;
+
+    // Tell ScrollTrigger to use our main element as the scroll container
+    ScrollTrigger.defaults({ scroller });
     ScrollTrigger.refresh();
 
     const triggers: ScrollTrigger[] = [];
@@ -53,17 +58,16 @@ export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
 
       const trigger = ScrollTrigger.create({
         trigger: el,
+        scroller,
         start: "top top",
         end: "bottom top",
         scrub: 1,
         onUpdate: (self) => {
-          // Update store silently for R3F to read via getState()
           useStore.setState({
             scrollPhase: section.phase,
             scrollProgress: self.progress,
             activeRegion: section.region,
           });
-          // Update modal visibility (with bail-out to avoid unnecessary re-renders)
           updateModal(i, self.progress);
         },
       });
@@ -73,6 +77,7 @@ export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
     if (playgroundRef.current) {
       const playgroundTrigger = ScrollTrigger.create({
         trigger: playgroundRef.current,
+        scroller,
         start: "top center",
         onEnter: () => {
           useStore.getState().setScrollMode(false);

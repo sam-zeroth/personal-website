@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useStore } from "@/store/useStore";
 import {
@@ -51,6 +51,7 @@ const ScrollSections = dynamic(
 export default function Home() {
   const goHome = useStore((s) => s.goHome);
   const scrollMode = useStore((s) => s.scrollMode);
+  const mainRef = useRef<HTMLElement>(null);
 
   const [phase, setPhase] = useState<
     "tracing" | "floating" | "zooming" | "settled"
@@ -93,16 +94,10 @@ export default function Home() {
     return () => cancelAnimationFrame(rafId);
   }, [phase]);
 
-  // Lock body scroll during intro, unlock after settled
+  // Lock scroll during intro, unlock after settled
   useEffect(() => {
-    if (phase !== "settled") {
-      document.body.style.overflow = "hidden";
-      return;
-    }
-    const timer = setTimeout(() => {
-      document.body.style.overflow = "";
-      setScrollEnabled(true);
-    }, 100);
+    if (phase !== "settled") return;
+    const timer = setTimeout(() => setScrollEnabled(true), 100);
     return () => clearTimeout(timer);
   }, [phase]);
 
@@ -111,10 +106,8 @@ export default function Home() {
 
   return (
     <main
-      className="relative bg-white"
-      style={{
-        overflowX: "hidden",
-      }}
+      ref={mainRef}
+      className={`relative bg-white h-dvh overflow-x-hidden ${scrollEnabled ? "overflow-y-auto" : "overflow-y-hidden"}`}
     >
       {phase !== "settled" && phase !== "zooming" && (
         <div
@@ -157,12 +150,13 @@ export default function Home() {
         style={{
           opacity: pageReady ? 1 : 0,
           transition: `opacity ${INTRO_FLOAT_DURATION}ms ease-in`,
+          pointerEvents: scrollMode ? "none" : "auto",
         }}
       >
         <BrainScene />
       </div>
 
-      {pageReady && <ScrollSections scrollEnabled={scrollEnabled} />}
+      {pageReady && <ScrollSections scrollEnabled={scrollEnabled} scrollerRef={mainRef} />}
 
       {phase === "settled" && scrollEnabled && scrollMode && (
         <ScrollIndicator />
