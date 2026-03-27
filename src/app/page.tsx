@@ -93,9 +93,16 @@ export default function Home() {
     return () => cancelAnimationFrame(rafId);
   }, [phase]);
 
+  // Lock body scroll during intro, unlock after settled
   useEffect(() => {
-    if (phase !== "settled") return;
-    const timer = setTimeout(() => setScrollEnabled(true), 100);
+    if (phase !== "settled") {
+      document.body.style.overflow = "hidden";
+      return;
+    }
+    const timer = setTimeout(() => {
+      document.body.style.overflow = "";
+      setScrollEnabled(true);
+    }, 100);
     return () => clearTimeout(timer);
   }, [phase]);
 
@@ -107,8 +114,6 @@ export default function Home() {
       className="relative bg-white"
       style={{
         overflowX: "hidden",
-        overflowY: scrollEnabled ? "auto" : "hidden",
-        height: scrollEnabled ? "auto" : "100dvh",
       }}
     >
       {phase !== "settled" && phase !== "zooming" && (
