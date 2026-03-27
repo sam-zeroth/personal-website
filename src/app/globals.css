@@ -578,8 +578,11 @@ body {
     top: auto !important;
     width: 100% !important;
     max-width: 100% !important;
-    max-height: 85vh !important;
+    max-height: 75dvh !important;
     border-radius: 20px 20px 0 0 !important;
     transform: none !important;
+    padding-bottom: env(safe-area-inset-bottom, 16px) !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 }

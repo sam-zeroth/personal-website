@@ -99,12 +99,19 @@ export default function FloatingModal({
         >
           <NeuralDecoration color={region.color} />
 
+          {/* Mobile drag handle */}
+          {isMobile && (
+            <div className="flex justify-center pt-3 pb-1" onClick={onClose}>
+              <div className="w-8 h-1 rounded-full bg-gray-300" />
+            </div>
+          )}
+
           {/* Close button — only in playground mode (when onClose is provided) */}
           {onClose && (
             <button
               onClick={onClose}
               className="absolute z-10 w-7 h-7 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors cursor-pointer"
-              style={{ top: 14, right: 14 }}
+              style={{ top: isMobile ? 10 : 14, right: 14 }}
             >
               <svg
                 width="14"
@@ -121,7 +128,7 @@ export default function FloatingModal({
             </button>
           )}
 
-          <div className="relative" style={{ padding: "28px 26px 24px" }}>
+          <div className="relative" style={{ padding: isMobile ? "12px 20px 20px" : "28px 26px 24px" }}>
             <Content />
           </div>
         </motion.div>
