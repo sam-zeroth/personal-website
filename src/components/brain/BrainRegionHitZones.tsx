@@ -1,9 +1,12 @@
 "use client";
 
+import { useRef } from "react";
 import { Sphere, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { useStore } from "@/store/useStore";
 import { brainRegions, type BrainRegionDef } from "@/data/brainData";
+
+const DRAG_THRESHOLD = 5; // pixels — movement beyond this counts as a drag
 
 // --- Change this to preview different styles ---
 // Options: "minimal" | "clean" | "scientific" | "technical"
@@ -11,6 +14,7 @@ const LABEL_STYLE: "minimal" | "clean" | "scientific" | "technical" = "minimal";
 
 export default function BrainRegionHitZones() {
   const { hoveredRegion, isZoomed, scrollMode, navigateTo, setHoveredRegion } = useStore();
+  const pointerDownPos = useRef<{ x: number; y: number } | null>(null);
 
   return (
     <group>
@@ -22,8 +26,19 @@ export default function BrainRegionHitZones() {
             <Sphere
               args={[region.hitRadius, 16, 16]}
               position={region.hitCenter}
-              onClick={() => {
-                if (!isZoomed && !scrollMode) navigateTo(region.id);
+              onPointerDown={(e) => {
+                pointerDownPos.current = { x: e.clientX, y: e.clientY };
+              }}
+              onClick={(e) => {
+                if (!isZoomed && !scrollMode && pointerDownPos.current) {
+                  const dx = e.clientX - pointerDownPos.current.x;
+                  const dy = e.clientY - pointerDownPos.current.y;
+                  const dist = Math.sqrt(dx * dx + dy * dy);
+                  if (dist < DRAG_THRESHOLD) {
+                    navigateTo(region.id);
+                  }
+                }
+                pointerDownPos.current = null;
               }}
               onPointerOver={() => {
                 if (!isZoomed && !scrollMode) {
