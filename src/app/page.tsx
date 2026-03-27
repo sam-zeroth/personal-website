@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
-import NavigationOverlay from "@/components/ui/NavigationOverlay";
-import ContentPanel from "@/components/ui/ContentPanel";
-import MobileNavStrip from "@/components/ui/MobileNavStrip";
 import { useStore } from "@/store/useStore";
+import FloatingModal from "@/components/scroll/FloatingModal";
+import {
+  scrollSections,
+  INTRO_TRACE_DURATION,
+  INTRO_FLOAT_DURATION,
+  INTRO_ZOOM_DURATION,
+} from "@/components/scroll/scrollConfig";
 
-const INTRO_DURATION = 2800; // ms — full trace animation + brief hold
-const FLOAT_DURATION = 1000; // ms — logo floats to corner
 
 function SamLogo() {
   return (
@@ -39,53 +41,104 @@ function SamLogo() {
   );
 }
 
-// Dynamic import for Three.js (no SSR)
 const BrainScene = dynamic(() => import("@/components/brain/BrainScene"), {
   ssr: false,
 });
 
+const ScrollSections = dynamic(
+  () => import("@/components/scroll/ScrollSections"),
+  { ssr: false }
+);
+
 export default function Home() {
   const goHome = useStore((s) => s.goHome);
+  const scrollMode = useStore((s) => s.scrollMode);
+  const activeRegion = useStore((s) => s.activeRegion);
   const showContent = useStore((s) => s.showContent);
-  // "tracing" = logo drawing in center, "floating" = moving to corner, "settled" = in final position
-  const [phase, setPhase] = useState<"tracing" | "floating" | "settled">("tracing");
+  const mainRef = useRef<HTMLElement>(null);
 
-  const startFloat = useCallback(() => {
-    setPhase("floating");
-  }, []);
+  const [phase, setPhase] = useState<
+    "tracing" | "floating" | "zooming" | "settled"
+  >("tracing");
+  const [scrollEnabled, setScrollEnabled] = useState(false);
+
+  const startFloat = useCallback(() => setPhase("floating"), []);
 
   useEffect(() => {
-    const traceTimer = setTimeout(startFloat, INTRO_DURATION);
+    const traceTimer = setTimeout(startFloat, INTRO_TRACE_DURATION);
     return () => clearTimeout(traceTimer);
   }, [startFloat]);
 
   useEffect(() => {
     if (phase !== "floating") return;
-    const settleTimer = setTimeout(() => setPhase("settled"), FLOAT_DURATION);
-    return () => clearTimeout(settleTimer);
+    const zoomTimer = setTimeout(() => setPhase("zooming"), INTRO_FLOAT_DURATION);
+    return () => clearTimeout(zoomTimer);
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== "zooming") return;
+
+    const start = performance.now();
+    let rafId: number;
+
+    // Ease-out cubic for smooth deceleration
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+
+    const animate = () => {
+      const elapsed = performance.now() - start;
+      const linear = Math.min(1, elapsed / INTRO_ZOOM_DURATION);
+      const progress = easeOut(linear);
+      useStore.setState({ scrollPhase: "intro", scrollProgress: progress });
+
+      if (progress < 1) {
+        rafId = requestAnimationFrame(animate);
+      } else {
+        setPhase("settled");
+      }
+    };
+    rafId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(rafId);
+  }, [phase]);
+
+  // Lock body scroll during intro, unlock after settled
+  useEffect(() => {
+    if (phase !== "settled") {
+      document.body.style.overflow = "hidden";
+      return;
+    }
+    const timer = setTimeout(() => {
+      document.body.style.overflow = "";
+      setScrollEnabled(true);
+    }, 100);
+    return () => clearTimeout(timer);
   }, [phase]);
 
   const isTracing = phase === "tracing";
-  const pageReady = phase === "floating" || phase === "settled";
+  const pageReady = phase !== "tracing";
 
   return (
-    <main className="w-screen h-dvh relative overflow-hidden bg-white">
-      {/* White backdrop that fades when floating starts */}
-      {phase !== "settled" && (
+    <main
+      ref={mainRef}
+      className="relative bg-white overflow-x-hidden"
+    >
+      {phase !== "settled" && phase !== "zooming" && (
         <div
           className="fixed inset-0 z-40 bg-white"
           style={{
             opacity: isTracing ? 1 : 0,
-            transition: `opacity ${FLOAT_DURATION}ms ease-out`,
+            transition: `opacity ${INTRO_FLOAT_DURATION}ms ease-out`,
             pointerEvents: isTracing ? "auto" : "none",
           }}
         />
       )}
 
-      {/* Logo — traces in center, floats to top-left, stays as home button */}
       <button
-        onClick={goHome}
-        className={`fixed z-50 cursor-pointer logo-trace-container ${showContent ? 'max-sm:hidden' : ''}`}
+        onClick={() => {
+          if (!scrollMode) goHome();
+          if (scrollMode) window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+        className="fixed z-50 cursor-pointer logo-trace-container"
         style={{
           top: isTracing ? "50%" : "var(--logo-top, 24px)",
           left: isTracing ? "50%" : "var(--logo-left, 24px)",
@@ -95,35 +148,84 @@ export default function Home() {
           marginTop: isTracing ? 0 : "var(--safe-top, 0px)",
           transition: isTracing
             ? "none"
-            : `top ${FLOAT_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1),
-               left ${FLOAT_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1),
-               width ${FLOAT_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1),
-               height ${FLOAT_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1),
-               transform ${FLOAT_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+            : `top ${INTRO_FLOAT_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1),
+               left ${INTRO_FLOAT_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1),
+               width ${INTRO_FLOAT_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1),
+               height ${INTRO_FLOAT_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1),
+               transform ${INTRO_FLOAT_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1)`,
         }}
       >
         <SamLogo />
       </button>
 
-      {/* 3D Brain Canvas — mounts immediately so it loads behind the white backdrop */}
       <div
-        className="absolute inset-0"
+        className="fixed inset-0"
         style={{
           opacity: pageReady ? 1 : 0,
-          transition: `opacity ${FLOAT_DURATION}ms ease-in`,
+          transition: `opacity ${INTRO_FLOAT_DURATION}ms ease-in`,
+          pointerEvents: scrollMode ? "none" : "auto",
         }}
       >
         <BrainScene />
       </div>
 
-      {/* UI Overlays — mount once floating starts */}
-      {pageReady && (
-        <>
-          <NavigationOverlay />
-          <ContentPanel />
-          <MobileNavStrip />
-        </>
+      {pageReady && <ScrollSections scrollEnabled={scrollEnabled} />}
+
+      {/* FloatingModal for playground mode (clicking lobes at the bottom) */}
+      {!scrollMode && (
+        <FloatingModal
+          activeRegion={activeRegion}
+          modalSide={scrollSections.find((s) => s.region === activeRegion)?.modalSide ?? "right"}
+          visible={showContent && !!activeRegion}
+          onClose={goHome}
+        />
+      )}
+
+      {phase === "settled" && scrollEnabled && scrollMode && (
+        <ScrollIndicator />
       )}
     </main>
+  );
+}
+
+function ScrollIndicator() {
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const onScroll = () => setVisible(false);
+    window.addEventListener("scroll", onScroll, { once: true });
+
+    const timer = setTimeout(() => setVisible(false), 3000);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      clearTimeout(timer);
+    };
+  }, []);
+
+  if (!visible) return null;
+
+  return (
+    <div
+      className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 animate-pulse-glow"
+      style={{
+        animation: "fadeIn 0.5s ease-out",
+      }}
+    >
+      <p className="text-[11px] text-gray-400 tracking-widest uppercase">
+        Scroll to explore
+      </p>
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className="text-gray-400"
+      >
+        <path d="M4 6l4 4 4-4" />
+      </svg>
+    </div>
   );
 }
