@@ -10,7 +10,7 @@ import { brainRegions, type BrainRegionDef } from "@/data/brainData";
 const LABEL_STYLE: "minimal" | "clean" | "scientific" | "technical" = "minimal";
 
 export default function BrainRegionHitZones() {
-  const { hoveredRegion, isZoomed, navigateTo, setHoveredRegion } = useStore();
+  const { hoveredRegion, isZoomed, scrollMode, navigateTo, setHoveredRegion } = useStore();
 
   return (
     <group>
@@ -23,10 +23,10 @@ export default function BrainRegionHitZones() {
               args={[region.hitRadius, 16, 16]}
               position={region.hitCenter}
               onClick={() => {
-                if (!isZoomed) navigateTo(region.id);
+                if (!isZoomed && !scrollMode) navigateTo(region.id);
               }}
               onPointerOver={() => {
-                if (!isZoomed) {
+                if (!isZoomed && !scrollMode) {
                   setHoveredRegion(region.id);
                   if (window.matchMedia("(pointer: fine)").matches) {
                     document.body.style.cursor = "pointer";
@@ -50,7 +50,7 @@ export default function BrainRegionHitZones() {
               />
             </Sphere>
 
-            {isHovered && !isZoomed && (
+            {isHovered && !isZoomed && !scrollMode && (
               <Html
                 position={[
                   region.hitCenter[0] + region.labelOffset[0],
