@@ -81,10 +81,13 @@ export default function Home() {
     const start = performance.now();
     let rafId: number;
 
+    // Ease-out cubic for smooth deceleration
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+
     const animate = () => {
       const elapsed = performance.now() - start;
-      const progress = Math.min(1, elapsed / INTRO_ZOOM_DURATION);
-      // Update store silently (no React re-renders) — R3F reads via getState()
+      const linear = Math.min(1, elapsed / INTRO_ZOOM_DURATION);
+      const progress = easeOut(linear);
       useStore.setState({ scrollPhase: "intro", scrollProgress: progress });
 
       if (progress < 1) {

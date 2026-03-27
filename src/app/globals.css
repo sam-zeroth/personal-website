@@ -119,13 +119,13 @@ body {
     filter: drop-shadow(0 0 0px transparent);
   }
   30% {
-    filter: drop-shadow(0 0 6px rgba(123, 47, 247, 0.5));
+    filter: drop-shadow(0 0 6px rgba(127, 255, 0, 0.5));
   }
   70% {
-    filter: drop-shadow(0 0 12px rgba(123, 47, 247, 0.6));
+    filter: drop-shadow(0 0 12px rgba(127, 255, 0, 0.6));
   }
   100% {
-    filter: drop-shadow(0 0 4px rgba(123, 47, 247, 0.2));
+    filter: drop-shadow(0 0 4px rgba(127, 255, 0, 0.2));
   }
 }
 

@@ -86,15 +86,20 @@ export default function ScrollAnimationController({
       }
     }
 
-    camera.position.lerp(targetPos.current, 0.08);
-    currentLookAt.current.lerp(targetLookAt.current, 0.08);
+    // Intro uses lerp for smooth zoom-in; scroll sections use direct set
+    // since GSAP scrub already provides smoothing
+    const isIntro = scrollPhase === "intro";
+    const lerpFactor = isIntro ? 0.06 : 0.15;
+
+    camera.position.lerp(targetPos.current, lerpFactor);
+    currentLookAt.current.lerp(targetLookAt.current, lerpFactor);
     camera.lookAt(currentLookAt.current);
 
     if (brainGroupRef.current) {
       brainGroupRef.current.rotation.y = THREE.MathUtils.lerp(
         brainGroupRef.current.rotation.y,
         targetBrainRotY.current,
-        0.06
+        lerpFactor
       );
     }
   });

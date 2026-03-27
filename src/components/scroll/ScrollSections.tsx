@@ -55,7 +55,7 @@ export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
         trigger: el,
         start: "top top",
         end: "bottom top",
-        scrub: 1,
+        scrub: 1.5,
         onUpdate: (self) => {
           useStore.setState({
             scrollPhase: section.phase,
