@@ -57,6 +57,8 @@ export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
         end: "bottom top",
         scrub: 1.5,
         onUpdate: (self) => {
+          // Don't update if we've entered playground mode
+          if (!useStore.getState().scrollMode) return;
           useStore.setState({
             scrollPhase: section.phase,
             scrollProgress: self.progress,
