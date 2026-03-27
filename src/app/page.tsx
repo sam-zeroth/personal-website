@@ -3,7 +3,9 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useStore } from "@/store/useStore";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import FloatingModal from "@/components/scroll/FloatingModal";
+import NavigationOverlay from "@/components/ui/NavigationOverlay";
 import {
   scrollSections,
   INTRO_TRACE_DURATION,
@@ -56,6 +58,7 @@ export default function Home() {
   const activeRegion = useStore((s) => s.activeRegion);
   const showContent = useStore((s) => s.showContent);
   const mainRef = useRef<HTMLElement>(null);
+  const isMobile = useIsMobile(640);
 
   const [phase, setPhase] = useState<
     "tracing" | "floating" | "zooming" | "settled"
@@ -107,12 +110,19 @@ export default function Home() {
       document.body.style.overflow = "hidden";
       return;
     }
+    if (isMobile) {
+      // Mobile: skip scroll journey, go straight to playground
+      document.body.style.overflow = "hidden";
+      useStore.getState().setScrollMode(false);
+      useStore.setState({ activeRegion: null });
+      return;
+    }
     const timer = setTimeout(() => {
       document.body.style.overflow = "";
       setScrollEnabled(true);
     }, 100);
     return () => clearTimeout(timer);
-  }, [phase]);
+  }, [phase, isMobile]);
 
   const isTracing = phase === "tracing";
   const pageReady = phase !== "tracing";
@@ -169,9 +179,9 @@ export default function Home() {
         <BrainScene />
       </div>
 
-      {pageReady && <ScrollSections scrollEnabled={scrollEnabled} />}
+      {pageReady && !isMobile && <ScrollSections scrollEnabled={scrollEnabled} />}
 
-      {/* FloatingModal for playground mode (clicking lobes at the bottom) */}
+      {/* FloatingModal for playground mode (clicking lobes / mobile) */}
       {!scrollMode && (
         <FloatingModal
           activeRegion={activeRegion}
@@ -180,6 +190,9 @@ export default function Home() {
           onClose={goHome}
         />
       )}
+
+      {/* Navigation overlay for playground / mobile */}
+      {!scrollMode && pageReady && <NavigationOverlay />}
 
       {phase === "settled" && scrollEnabled && scrollMode && (
         <ScrollIndicator />
