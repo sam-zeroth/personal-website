@@ -106,8 +106,9 @@ const BrainNetwork = forwardRef<THREE.Group>(function BrainNetwork(_, ref) {
     }
 
     const speed = isZoomed ? 0.05 : 0.12;
-    const autoY = Math.sin(state.clock.elapsedTime * speed) * 0.25;
-    const autoX = Math.sin(state.clock.elapsedTime * speed * 0.7) * 0.08;
+    const elapsed = performance.now() / 1000;
+    const autoY = Math.sin(elapsed * speed) * 0.25;
+    const autoX = Math.sin(elapsed * speed * 0.7) * 0.08;
 
     groupRef.current.rotation.y =
       userRotation.current.y * userBlend + autoY * (1 - userBlend);

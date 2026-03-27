@@ -254,11 +254,13 @@ const dotFragmentShader = `
 
     if (uActiveRegion >= 0.0) {
       if (abs(vRegionId - uActiveRegion) < 0.5) {
+        // Active lobe: darken to saturated color
         color = dark;
         a = 0.95;
       } else {
-        color = vec3(0.82, 0.82, 0.85);
-        a = 0.25;
+        // Other lobes: keep light pastel
+        color = pastel;
+        a = 0.55;
       }
     } else if (uHoveredRegion >= 0.0) {
       if (abs(vRegionId - uHoveredRegion) < 0.5) {
@@ -266,9 +268,9 @@ const dotFragmentShader = `
         color = dark;
         a = 0.92;
       } else {
-        // Other lobes: fade to very light grey
-        color = vec3(0.82, 0.82, 0.85);
-        a = 0.3;
+        // Other lobes: keep light pastel
+        color = pastel;
+        a = 0.5;
       }
     } else {
       // Default: light pastel tint per region
@@ -318,18 +320,18 @@ const lineFragmentShader = `
         color = dark;
         a = vAlpha * 2.0;
       } else {
-        color = vec3(0.85, 0.85, 0.88);
-        a = vAlpha * 0.15;
+        // Keep pastel lines, just softer
+        color = pastel;
+        a = vAlpha * 0.4;
       }
     } else if (uHoveredRegion >= 0.0) {
       if (abs(vRegionId - uHoveredRegion) < 0.5) {
-        // Hovered: darken connections
         color = dark;
         a = vAlpha * 2.5;
       } else {
-        // Others: very faint
-        color = vec3(0.85, 0.85, 0.88);
-        a = vAlpha * 0.2;
+        // Keep pastel lines, softer
+        color = pastel;
+        a = vAlpha * 0.35;
       }
     } else {
       // Default: light pastel tinted lines
@@ -441,7 +443,7 @@ export default function NeuronCloud() {
     if (dotMat) {
       dotMat.uniforms.uHoveredRegion.value = hovIdx;
       dotMat.uniforms.uActiveRegion.value = actIdx;
-      dotMat.uniforms.uTime.value = state.clock.elapsedTime;
+      dotMat.uniforms.uTime.value = performance.now() / 1000;
       dotMat.uniforms.uPixelRatio.value = state.gl.getPixelRatio();
       dotMat.uniforms.uOpacity.value +=
         (targetOpacity - dotMat.uniforms.uOpacity.value) * 0.08;

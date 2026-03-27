@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useStore } from "@/store/useStore";
+import ContentPanel from "@/components/ui/ContentPanel";
 import {
   INTRO_TRACE_DURATION,
   INTRO_FLOAT_DURATION,
@@ -163,6 +164,9 @@ export default function Home() {
       </div>
 
       {pageReady && <ScrollSections scrollEnabled={scrollEnabled} />}
+
+      {/* ContentPanel for playground mode (clicking lobes at the bottom) */}
+      {!scrollMode && <ContentPanel />}
 
       {phase === "settled" && scrollEnabled && scrollMode && (
         <ScrollIndicator />
