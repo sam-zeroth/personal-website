@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useStore } from "@/store/useStore";
@@ -17,10 +17,28 @@ export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const playgroundRef = useRef<HTMLDivElement>(null);
-  const setScrollState = useStore((s) => s.setScrollState);
-  const setScrollMode = useStore((s) => s.setScrollMode);
-  const scrollPhase = useStore((s) => s.scrollPhase);
-  const scrollProgress = useStore((s) => s.scrollProgress);
+
+  // Modal visibility state — updated from GSAP callbacks, not Zustand subscriptions
+  const [modalState, setModalState] = useState<{
+    region: string | null;
+    modalSide: "left" | "right" | "bottom";
+    visible: boolean;
+  }>({ region: null, modalSide: "right", visible: false });
+
+  const updateModal = useCallback((sectionIndex: number, progress: number) => {
+    const section = scrollSections[sectionIndex];
+    const visible = progress > 0.3 && progress < 0.95;
+    setModalState((prev) => {
+      if (
+        prev.region === section.region &&
+        prev.modalSide === section.modalSide &&
+        prev.visible === visible
+      ) {
+        return prev; // No change, skip re-render
+      }
+      return { region: section.region, modalSide: section.modalSide, visible };
+    });
+  }, []);
 
   useEffect(() => {
     if (!scrollEnabled || !containerRef.current) return;
@@ -39,7 +57,14 @@ export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
         end: "bottom top",
         scrub: 1,
         onUpdate: (self) => {
-          setScrollState(section.phase, self.progress);
+          // Update store silently for R3F to read via getState()
+          useStore.setState({
+            scrollPhase: section.phase,
+            scrollProgress: self.progress,
+            activeRegion: section.region,
+          });
+          // Update modal visibility (with bail-out to avoid unnecessary re-renders)
+          updateModal(i, self.progress);
         },
       });
       triggers.push(trigger);
@@ -49,10 +74,17 @@ export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
       const playgroundTrigger = ScrollTrigger.create({
         trigger: playgroundRef.current,
         start: "top center",
-        onEnter: () => setScrollMode(false),
+        onEnter: () => {
+          useStore.getState().setScrollMode(false);
+          setModalState({ region: null, modalSide: "right", visible: false });
+        },
         onLeaveBack: () => {
-          setScrollMode(true);
-          setScrollState("contact", 1);
+          useStore.getState().setScrollMode(true);
+          useStore.setState({
+            scrollPhase: "contact",
+            scrollProgress: 1,
+            activeRegion: "contact",
+          });
         },
       });
       triggers.push(playgroundTrigger);
@@ -61,13 +93,7 @@ export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
     return () => {
       triggers.forEach((t) => t.kill());
     };
-  }, [scrollEnabled, setScrollState, setScrollMode]);
-
-  const currentSection = scrollSections.find((s) => s.phase === scrollPhase);
-  const modalVisible =
-    currentSection != null &&
-    scrollProgress > 0.3 &&
-    scrollProgress < 0.95;
+  }, [scrollEnabled, updateModal]);
 
   return (
     <>
@@ -89,9 +115,9 @@ export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
       </div>
 
       <FloatingModal
-        activeRegion={currentSection?.region ?? null}
-        modalSide={currentSection?.modalSide ?? "right"}
-        visible={modalVisible}
+        activeRegion={modalState.region}
+        modalSide={modalState.modalSide}
+        visible={modalState.visible}
       />
     </>
   );

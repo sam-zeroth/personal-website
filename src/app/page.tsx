@@ -9,7 +9,6 @@ import {
   INTRO_ZOOM_DURATION,
 } from "@/components/scroll/scrollConfig";
 
-const TOTAL_INTRO = INTRO_TRACE_DURATION + INTRO_FLOAT_DURATION + INTRO_ZOOM_DURATION;
 
 function SamLogo() {
   return (
@@ -52,7 +51,6 @@ const ScrollSections = dynamic(
 export default function Home() {
   const goHome = useStore((s) => s.goHome);
   const scrollMode = useStore((s) => s.scrollMode);
-  const setScrollState = useStore((s) => s.setScrollState);
 
   const [phase, setPhase] = useState<
     "tracing" | "floating" | "zooming" | "settled"
@@ -81,7 +79,8 @@ export default function Home() {
     const animate = () => {
       const elapsed = performance.now() - start;
       const progress = Math.min(1, elapsed / INTRO_ZOOM_DURATION);
-      setScrollState("intro", progress);
+      // Update store silently (no React re-renders) — R3F reads via getState()
+      useStore.setState({ scrollPhase: "intro", scrollProgress: progress });
 
       if (progress < 1) {
         rafId = requestAnimationFrame(animate);
@@ -92,7 +91,7 @@ export default function Home() {
     rafId = requestAnimationFrame(animate);
 
     return () => cancelAnimationFrame(rafId);
-  }, [phase, setScrollState]);
+  }, [phase]);
 
   useEffect(() => {
     if (phase !== "settled") return;

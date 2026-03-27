@@ -17,7 +17,6 @@ export default function ScrollAnimationController({
   brainGroupRef: React.RefObject<THREE.Group | null>;
 }) {
   const { camera } = useThree();
-  const { scrollMode, scrollPhase, scrollProgress } = useStore();
 
   const targetPos = useRef(new THREE.Vector3(...DEFAULT_CAMERA_POS));
   const targetLookAt = useRef(new THREE.Vector3(...DEFAULT_LOOK_AT));
@@ -25,6 +24,8 @@ export default function ScrollAnimationController({
   const targetBrainRotY = useRef(0);
 
   useFrame(() => {
+    // Read store inside useFrame to avoid React re-renders (R3F best practice)
+    const { scrollMode, scrollPhase, scrollProgress } = useStore.getState();
     if (!scrollMode) return;
 
     if (scrollPhase === "intro") {
