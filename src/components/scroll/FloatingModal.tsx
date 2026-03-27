@@ -21,12 +21,14 @@ interface FloatingModalProps {
   activeRegion: string | null;
   modalSide: ScrollSectionConfig["modalSide"];
   visible: boolean;
+  onClose?: () => void;
 }
 
 export default function FloatingModal({
   activeRegion,
   modalSide,
   visible,
+  onClose,
 }: FloatingModalProps) {
   const isMobile = useIsMobile(640);
   const Content = activeRegion ? contentMap[activeRegion] : null;
@@ -96,6 +98,29 @@ export default function FloatingModal({
           transition={{ type: "spring", damping: 25, stiffness: 200 }}
         >
           <NeuralDecoration color={region.color} />
+
+          {/* Close button — only in playground mode (when onClose is provided) */}
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="absolute z-10 w-7 h-7 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors cursor-pointer"
+              style={{ top: 14, right: 14 }}
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              >
+                <line x1="2" y1="2" x2="12" y2="12" />
+                <line x1="12" y1="2" x2="2" y2="12" />
+              </svg>
+            </button>
+          )}
+
           <div className="relative" style={{ padding: "28px 26px 24px" }}>
             <Content />
           </div>

@@ -3,8 +3,9 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useStore } from "@/store/useStore";
-import ContentPanel from "@/components/ui/ContentPanel";
+import FloatingModal from "@/components/scroll/FloatingModal";
 import {
+  scrollSections,
   INTRO_TRACE_DURATION,
   INTRO_FLOAT_DURATION,
   INTRO_ZOOM_DURATION,
@@ -52,6 +53,8 @@ const ScrollSections = dynamic(
 export default function Home() {
   const goHome = useStore((s) => s.goHome);
   const scrollMode = useStore((s) => s.scrollMode);
+  const activeRegion = useStore((s) => s.activeRegion);
+  const showContent = useStore((s) => s.showContent);
   const mainRef = useRef<HTMLElement>(null);
 
   const [phase, setPhase] = useState<
@@ -165,8 +168,15 @@ export default function Home() {
 
       {pageReady && <ScrollSections scrollEnabled={scrollEnabled} />}
 
-      {/* ContentPanel for playground mode (clicking lobes at the bottom) */}
-      {!scrollMode && <ContentPanel />}
+      {/* FloatingModal for playground mode (clicking lobes at the bottom) */}
+      {!scrollMode && (
+        <FloatingModal
+          activeRegion={activeRegion}
+          modalSide={scrollSections.find((s) => s.region === activeRegion)?.modalSide ?? "right"}
+          visible={showContent && !!activeRegion}
+          onClose={goHome}
+        />
+      )}
 
       {phase === "settled" && scrollEnabled && scrollMode && (
         <ScrollIndicator />
