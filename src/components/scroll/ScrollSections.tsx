@@ -74,6 +74,8 @@ export default function ScrollSections({ scrollEnabled }: ScrollSectionsProps) {
         start: "top center",
         onEnter: () => {
           useStore.getState().setScrollMode(false);
+          // Clear active region so no lobe stays highlighted
+          useStore.setState({ activeRegion: null });
           setModalState({ region: null, modalSide: "right", visible: false });
         },
         onLeaveBack: () => {

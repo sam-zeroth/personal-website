@@ -6,6 +6,7 @@ import * as THREE from "three";
 import BrainNetwork from "./BrainNetwork";
 import CameraController from "./CameraController";
 import ScrollAnimationController from "@/components/scroll/ScrollAnimationController";
+import { useStore } from "@/store/useStore";
 
 // Suppress THREE.Clock deprecation warning (triggered by R3F v9 internals)
 const _origWarn = console.warn;
@@ -16,11 +17,16 @@ console.warn = (...args: unknown[]) => {
 
 export default function BrainScene() {
   const brainGroupRef = useRef<THREE.Group>(null);
+  const scrollMode = useStore((s) => s.scrollMode);
 
   return (
     <Canvas
       camera={{ position: [0, 0, 12], fov: 60 }}
-      style={{ background: "#ffffff", touchAction: "none" }}
+      style={{
+        background: "#ffffff",
+        // Allow touch scroll during scroll mode, lock touch for playground drag
+        touchAction: scrollMode ? "auto" : "none",
+      }}
       gl={{ antialias: true, alpha: true }}
     >
       <Suspense fallback={null}>
