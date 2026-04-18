@@ -8,7 +8,6 @@ import {
   getAdjacentWritings,
   type WritingFrontmatter,
 } from "@/lib/writings";
-import SamLogo from "@/components/ui/SamLogo";
 import ReadingProgress from "./ReadingProgress";
 
 export async function generateStaticParams() {
@@ -84,31 +83,41 @@ export default async function WritingPage({
   const readingTime = estimateReadingTime(raw);
 
   return (
-    <div className="min-h-dvh bg-white">
+    <>
       <ReadingProgress />
 
-      {/* Top bar */}
       <nav className="writings-topbar">
-        <SamLogo size={32} />
         <Link href="/writings" className="writings-back-link">
           <svg
-            width="16"
-            height="16"
+            width="12"
+            height="12"
             viewBox="0 0 16 16"
             fill="none"
             stroke="currentColor"
-            strokeWidth="1.5"
+            strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            aria-hidden
           >
             <path d="M10 3L5 8L10 13" />
           </svg>
-          All writings
+          All essays
         </Link>
+        <div
+          style={{
+            marginLeft: "auto",
+            fontFamily: "var(--font-mono), monospace",
+            fontSize: 11,
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            opacity: 0.55,
+          }}
+        >
+          Reading
+        </div>
       </nav>
 
       <article className="writings-article">
-        {/* Meta */}
         <div className="writings-article-meta">
           <span className="writings-article-tag">{frontmatter.tag}</span>
           <span className="writings-meta-dot" />
@@ -124,13 +133,10 @@ export default async function WritingPage({
         <h1 className="writings-article-title">{frontmatter.title}</h1>
         <p className="writings-article-subtitle">{frontmatter.excerpt}</p>
 
-        {/* Rule with dot */}
         <div className="writings-article-rule" />
 
-        {/* Body */}
         <div className="writings-article-body">{content}</div>
 
-        {/* Footer nav */}
         {(prev || next) && (
           <div className="writings-article-footer">
             <div className="writings-article-footer-nav">
@@ -139,7 +145,7 @@ export default async function WritingPage({
                   href={`/writings/${prev.slug}`}
                   className="writings-nav-link"
                 >
-                  <span className="writings-nav-label">Previous</span>
+                  <span className="writings-nav-label">← Previous</span>
                   <span className="writings-nav-title">{prev.title}</span>
                 </Link>
               ) : (
@@ -150,7 +156,7 @@ export default async function WritingPage({
                   href={`/writings/${next.slug}`}
                   className="writings-nav-link writings-nav-link-next"
                 >
-                  <span className="writings-nav-label">Next</span>
+                  <span className="writings-nav-label">Next →</span>
                   <span className="writings-nav-title">{next.title}</span>
                 </Link>
               ) : (
@@ -160,6 +166,6 @@ export default async function WritingPage({
           </div>
         )}
       </article>
-    </div>
+    </>
   );
 }

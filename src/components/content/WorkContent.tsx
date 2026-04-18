@@ -1,93 +1,157 @@
 "use client";
 
-import { motion } from "framer-motion";
-import {
-  stagger,
-  fadeUp,
-  DrawerHeader,
-  ConnectionDivider,
-  SubHeading,
-} from "../ui/CortexElements";
+interface Project {
+  title: string;
+  description: string;
+  tech: string[];
+  year: string;
+  url?: string;
+  status: "shipping" | "building" | "archived";
+}
 
-const COLOR = "#00d4ff";
-
-const projects = [
+const projects: Project[] = [
   {
     title: "Pyrana",
     description:
-      "Agent orchestration platform for building, deploying, and managing AI agent workflows at scale.",
+      "Agent orchestration platform for building, deploying, and managing AI agent workflows at scale. Structured outputs, governance-as-code, self-improving pipelines.",
     tech: ["Python", "TypeScript", "AI Agents"],
     year: "2025",
     url: "https://pyrana.ai",
+    status: "building",
   },
+];
+
+const skills = [
+  "Python", "TypeScript", "React", "Next.js",
+  "AI Agents", "LLMs", "SQL", "Systems Design",
+  "Three.js", "Postgres", "Framer Motion",
 ];
 
 export default function WorkContent() {
   return (
-    <motion.div variants={stagger} initial="initial" animate="animate">
-      <DrawerHeader
-        lobe="Frontal Lobe"
-        lobeFunction="Planning, decision-making & execution"
-        title="Work"
-        color={COLOR}
-      />
+    <article>
+      <header style={{ marginBottom: 18 }}>
+        <span className="small-caps" style={{ opacity: 0.65 }}>Projects.dir</span>
+        <h1
+          style={{
+            fontFamily: "var(--font-pixelify), system-ui",
+            fontSize: 34,
+            fontWeight: 700,
+            lineHeight: 1,
+            marginTop: 6,
+            letterSpacing: "-0.01em",
+          }}
+        >
+          Things I&apos;m building.
+        </h1>
+      </header>
 
-      <ConnectionDivider color={COLOR} />
+      <p style={{ fontSize: 16, lineHeight: 1.65, marginBottom: 20 }}>
+        I work on systems that sit at the intersection of AI, agency, and governance —
+        software that makes itself a little better every day.
+      </p>
 
-      <SubHeading color={COLOR}>Projects</SubHeading>
-
-      {projects.map((project) => {
-        const card = (
-          <motion.div
-            key={project.title}
-            variants={fadeUp}
-            className="rounded-xl bg-gray-50/80 border-l-[3px] border-transparent hover:border-l-[#00d4ff] transition-all cursor-pointer group"
-            style={{ padding: 16, marginBottom: 10 }}
-          >
-            <div className="flex justify-between items-baseline">
-              <h4 className="text-[14px] font-semibold text-gray-800 tracking-tight">
-                {project.title}
-                {"url" in project && (
-                  <span className="inline-block ml-1.5 text-[10px] text-[#00d4ff] opacity-0 group-hover:opacity-100 transition-opacity">
-                    ↗
-                  </span>
-                )}
-              </h4>
-              <span className="text-[10px] font-mono text-gray-400">
-                {project.year}
+      {projects.map((project) => (
+        <a
+          key={project.title}
+          href={project.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: "block",
+            padding: "18px 20px",
+            border: "1.5px solid var(--win-ink)",
+            background: "var(--win-bg)",
+            marginBottom: 14,
+            textDecoration: "none",
+            color: "var(--win-ink)",
+            boxShadow: "3px 3px 0 var(--win-ink)",
+            transition: "transform 0.08s ease, box-shadow 0.08s ease",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translate(-1px, -1px)";
+            e.currentTarget.style.boxShadow = "4px 4px 0 var(--win-ink)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "none";
+            e.currentTarget.style.boxShadow = "3px 3px 0 var(--win-ink)";
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+            <h3
+              style={{
+                fontFamily: "var(--font-pixelify), system-ui",
+                fontSize: 20,
+                fontWeight: 700,
+              }}
+            >
+              {project.title} <span style={{ fontSize: 14, opacity: 0.6 }}>↗</span>
+            </h3>
+            <span
+              style={{
+                fontFamily: "var(--font-mono), monospace",
+                fontSize: 11,
+                padding: "2px 8px",
+                background: "var(--hot-amber)",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+              }}
+            >
+              {project.status}
+            </span>
+          </div>
+          <p style={{ fontSize: 14, lineHeight: 1.55, color: "oklch(0.28 0.02 80)" }}>
+            {project.description}
+          </p>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 10 }}>
+            {project.tech.map((t) => (
+              <span
+                key={t}
+                style={{
+                  fontFamily: "var(--font-mono), monospace",
+                  fontSize: 10,
+                  padding: "2px 7px",
+                  border: "1px solid var(--win-ink)",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                {t}
               </span>
-            </div>
-            <p className="text-[12px] text-gray-500 mt-1 leading-relaxed">
-              {project.description}
-            </p>
-            <div className="flex flex-wrap gap-1.5 mt-2.5">
-              {project.tech.map((t) => (
-                <span
-                  key={t}
-                  className="px-2 py-0.5 text-[10px] rounded border border-gray-200 text-gray-500"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        );
+            ))}
+          </div>
+        </a>
+      ))}
 
-        return "url" in project ? (
-          <a
-            key={project.title}
-            href={project.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block no-underline"
+      <hr className="rule-dotted" />
+
+      <h2
+        style={{
+          fontFamily: "var(--font-pixelify), system-ui",
+          fontSize: 20,
+          fontWeight: 700,
+          marginBottom: 12,
+        }}
+      >
+        Tools &amp; Stack
+      </h2>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        {skills.map((s) => (
+          <span
+            key={s}
+            className="small-caps"
+            style={{
+              padding: "4px 9px",
+              border: "1.5px solid var(--win-ink)",
+              background: "var(--paper)",
+              fontSize: 11,
+              letterSpacing: "0.08em",
+            }}
           >
-            {card}
-          </a>
-        ) : (
-          card
-        );
-      })}
-
-    </motion.div>
+            {s}
+          </span>
+        ))}
+      </div>
+    </article>
   );
 }

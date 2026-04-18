@@ -3,5 +3,12 @@ export default function WritingsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div style={{ overflow: "auto", height: "100dvh" }}>{children}</div>;
+  return (
+    <div
+      id="writings-scroll"
+      className="writings-page-root"
+    >
+      {children}
+    </div>
+  );
 }

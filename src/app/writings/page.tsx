@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { getAllWritings, type WritingMeta } from "@/lib/writings";
-import SamLogo from "@/components/ui/SamLogo";
 
 export const metadata = {
   title: "Writings",
-  description:
-    "Essays, technical posts, and things I'm thinking about.",
+  description: "Essays, technical posts, and things I'm thinking about.",
 };
 
 function groupByYear(writings: WritingMeta[]) {
@@ -28,16 +26,43 @@ export default async function WritingsIndex() {
   const grouped = groupByYear(writings);
 
   return (
-    <div className="min-h-dvh bg-white">
-      {/* Top bar */}
+    <>
       <nav className="writings-topbar">
-        <SamLogo size={32} />
+        <Link href="/" className="writings-back-link">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="M10 3L5 8L10 13" />
+          </svg>
+          sam.OS
+        </Link>
+        <div
+          style={{
+            marginLeft: "auto",
+            fontFamily: "var(--font-mono), monospace",
+            fontSize: 11,
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            opacity: 0.55,
+          }}
+        >
+          Essays &amp; Notes
+        </div>
       </nav>
 
       <div className="writings-index-content">
-        <h1 className="writings-index-title">Writings</h1>
+        <h1 className="writings-index-title">Writings.</h1>
         <p className="writings-index-description">
-          Essays, technical posts, and things I&apos;m thinking about.
+          Essays, technical posts, and things I&apos;m thinking about — mostly
+          at the intersection of minds, machines, and language.
         </p>
 
         {grouped.map(([year, posts]) => (
@@ -61,6 +86,6 @@ export default async function WritingsIndex() {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }

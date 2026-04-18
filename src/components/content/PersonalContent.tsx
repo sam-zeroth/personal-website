@@ -1,16 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-import {
-  stagger,
-  fadeUp,
-  DrawerHeader,
-  ConnectionDivider,
-  SubHeading,
-} from "../ui/CortexElements";
-
-const COLOR = "#7b2ff7";
-
 const timeline = [
   {
     period: "Now",
@@ -20,7 +9,7 @@ const timeline = [
   {
     period: "Previously",
     title: "Kenvue (J&J spin-off)",
-    desc: "AdTech — built novel algorithms to improve advertising targeting and spend optimization, working on the future of advertising technology.",
+    desc: "AdTech — built novel algorithms to improve advertising targeting and spend optimization.",
   },
   {
     period: "Previously",
@@ -36,64 +25,122 @@ const timeline = [
 
 export default function PersonalContent() {
   return (
-    <motion.div variants={stagger} initial="initial" animate="animate">
-      <DrawerHeader
-        lobe="Parietal Lobe"
-        lobeFunction="Self-awareness, spatial reasoning & integration"
-        title="Personal"
-        color={COLOR}
-      />
-
-      <ConnectionDivider color={COLOR} />
-
-      <motion.div variants={fadeUp} style={{ marginBottom: 28 }}>
-        <p className="text-[13px] text-gray-600 leading-relaxed">
-          Northeastern University grad with a BS in Computer Science and
-          Philosophy. Deeply interested in the intersections of mind,
-          computation, and logic. Currently building AI agent infrastructure at
-          Zeroth Technology. Always reading, always learning.
-        </p>
-        <a
-          href="https://linkedin.com/in/sam-merkovitz"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-[12px] font-medium text-[#7b2ff7] hover:text-[#6020d0] transition-colors"
-          style={{ marginTop: 12 }}
+    <article>
+      <header style={{ marginBottom: 18 }}>
+        <span className="small-caps" style={{ opacity: 0.65 }}>About.sam</span>
+        <h1
+          style={{
+            fontFamily: "var(--font-pixelify), system-ui",
+            fontSize: 34,
+            fontWeight: 700,
+            lineHeight: 1,
+            marginTop: 6,
+            letterSpacing: "-0.01em",
+          }}
         >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            xmlns="http://www.w3.org/2000/svg"
+          hello, i&apos;m sam.
+        </h1>
+      </header>
+
+      <p
+        style={{
+          fontSize: 16,
+          lineHeight: 1.65,
+          marginBottom: 14,
+        }}
+      >
+        Northeastern grad — BS in Computer Science and Philosophy. Deeply interested in the
+        intersections of mind, computation, and logic. Currently building AI agent
+        infrastructure at Zeroth Technology. Always reading, always learning.
+      </p>
+
+      <p style={{ fontSize: 16, lineHeight: 1.65 }}>
+        I grew up curious about how things think — brains, machines, languages, and lately
+        the systems we build that seem to do a bit of both.
+      </p>
+
+      <hr className="rule-dotted" />
+
+      <h2
+        style={{
+          fontFamily: "var(--font-pixelify), system-ui",
+          fontSize: 20,
+          fontWeight: 700,
+          marginBottom: 14,
+          letterSpacing: "0.01em",
+        }}
+      >
+        Résumé
+      </h2>
+
+      <ol style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 14 }}>
+        {timeline.map((item) => (
+          <li
+            key={item.title}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "90px 1fr",
+              gap: 12,
+              paddingBottom: 14,
+              borderBottom: "1px dashed oklch(0.65 0.03 80)",
+            }}
           >
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-          </svg>
-          Connect on LinkedIn
-        </a>
-      </motion.div>
+            <div>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono), monospace",
+                  fontSize: 10,
+                  fontWeight: 600,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  padding: "2px 6px",
+                  border: "1.5px solid var(--win-ink)",
+                  display: "inline-block",
+                }}
+              >
+                {item.period}
+              </span>
+            </div>
+            <div>
+              <h3
+                style={{
+                  fontFamily: "var(--font-pixelify), system-ui",
+                  fontSize: 16,
+                  fontWeight: 700,
+                  marginBottom: 4,
+                }}
+              >
+                {item.title}
+              </h3>
+              <p style={{ fontSize: 14, lineHeight: 1.55, color: "oklch(0.3 0.02 80)" }}>
+                {item.desc}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ol>
 
-      <SubHeading color={COLOR}>Experience</SubHeading>
+      <hr className="rule-dotted" />
 
-      {timeline.map((item, i) => (
-        <motion.div
-          key={item.title}
-          variants={fadeUp}
-          className="rounded-xl bg-gray-50/80 border-l-[3px] border-transparent hover:border-l-[#7b2ff7] transition-all"
-          style={{ padding: 16, marginBottom: 10 }}
-        >
-          <span className="text-[10px] font-mono font-medium tracking-wider uppercase text-[#7b2ff7]">
-            {item.period}
-          </span>
-          <h4 className="text-[14px] font-semibold text-gray-800 tracking-tight mt-0.5">
-            {item.title}
-          </h4>
-          <p className="text-[12px] text-gray-500 mt-1 leading-relaxed">
-            {item.desc}
-          </p>
-        </motion.div>
-      ))}
-
-    </motion.div>
+      <a
+        href="https://www.linkedin.com/in/sam-merkovitz/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="small-caps"
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          padding: "8px 12px",
+          border: "1.5px solid var(--win-ink)",
+          background: "var(--paper)",
+          color: "var(--win-ink)",
+          textDecoration: "none",
+          boxShadow: "2px 2px 0 var(--win-ink)",
+        }}
+      >
+        Connect on LinkedIn →
+      </a>
+    </article>
   );
 }
