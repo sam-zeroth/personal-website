@@ -1577,7 +1577,14 @@ body {
     background: transparent;
   }
 
-  .writings-index-content { padding: 28px 22px calc(var(--safe-bottom, 0px) + 80px); }
+  .writings-index-content {
+    padding: 28px 22px calc(var(--safe-bottom, 0px) + 80px);
+    /* Force the inner scroll container to overflow, which lets iOS Safari
+       minimize its URL pill on scroll and extend the viewport behind
+       Safari chrome. Without this, short lists sit in a fixed small
+       viewport and the cream doesn't reach the screen edges. */
+    min-height: calc(100dvh + 1px);
+  }
 
   .writings-index-title {
     font-family: Georgia, "Young Serif", serif;
