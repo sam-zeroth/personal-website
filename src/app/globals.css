@@ -914,6 +914,13 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Force the article content to overflow the scroll container so iOS Safari
+   minimizes its URL pill on scroll, letting the cream paint behind Safari
+   chrome. Matches the same trick used on /writings. */
+.ios-app-body > article {
+  min-height: calc(100% + 1px);
+}
+
 /* ── Editorial content building blocks (mobile app views) ── */
 
 .ed-kicker {
