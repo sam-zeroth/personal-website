@@ -660,89 +660,102 @@ body {
 }
 
 /* ════════════════════════════════════════════════════════════
-   iOS 6-era phone home (mobile)
+   Modern iPhone phone home (mobile)
+   The site renders inside Safari on a real device — so the
+   status bar, Dynamic Island, home indicator, and Safari URL
+   pill are all drawn by the OS, not us. We only own the zone
+   between them.
    ════════════════════════════════════════════════════════════ */
 
 .ios-stage {
   position: fixed;
   inset: 0;
   overflow: hidden;
-  background: oklch(0.1 0.02 240);
-  font-family: -apple-system, "Helvetica Neue", Helvetica, system-ui, sans-serif;
+  background: oklch(0 0 0);
+  font-family: -apple-system, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
 }
 
 .ios-wallpaper {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 30% 20%,
-      oklch(0.55 0.14 240) 0%,
-      oklch(0.25 0.1 250) 60%,
-      oklch(0.1 0.05 260) 100%);
+  background: oklch(0 0 0);
 }
 
-.ios-wallpaper::before {
-  content: "";
+/* ── Widgets ── */
+
+.ios-widget-row {
   position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(0deg, oklch(1 0 0 / 0.03) 0 1px, transparent 1px 3px),
-    repeating-linear-gradient(90deg, oklch(1 0 0 / 0.03) 0 1px, transparent 1px 3px);
-  opacity: 0.8;
+  left: 18px;
+  right: 18px;
+  top: calc(var(--safe-top, 0px) + 64px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  z-index: 10;
 }
 
-.ios-status {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: calc(var(--safe-top, 0px) + 22px);
-  padding-top: var(--safe-top, 0px);
+.ios-widget {
+  height: 152px;
+  background: oklch(0.14 0 0);
+  border: 0.5px solid oklch(0.22 0 0);
+  border-radius: 22px;
+  padding: 14px 16px;
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.04),
+    0 10px 30px oklch(0 0 0 / 0.5);
+  color: oklch(0.99 0 0);
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-between;
-  padding-left: 14px;
-  padding-right: 10px;
-  color: oklch(0.98 0 0);
-  font-family: "Helvetica Neue", -apple-system, system-ui;
+  overflow: hidden;
+}
+
+.ios-widget-eyebrow {
+  font-family: -apple-system, "SF Pro Text", system-ui;
+  font-size: 11px;
   font-weight: 700;
-  font-size: 13px;
-  z-index: 20;
-  text-shadow: 0 1px 1px oklch(0 0 0 / 0.4);
-}
-
-.ios-status-time { flex: 1; text-align: center; font-weight: 700; }
-.ios-status-right { display: flex; align-items: center; gap: 6px; }
-
-.ios-clock {
-  font-family: "Helvetica Neue", -apple-system, system-ui;
-  font-weight: 200;
-  font-size: 68px;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  text-shadow: 0 2px 12px oklch(0 0 0 / 0.4);
-}
-
-.ios-date {
-  font-family: var(--font-mono), monospace;
-  font-size: 12px;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
-  opacity: 0.8;
-  margin-top: 2px;
 }
+
+.ios-widget-eyebrow--cal { color: oklch(0.72 0.18 25); }
+.ios-widget-eyebrow--clock { color: oklch(0.62 0.15 255); font-weight: 600; }
+
+.ios-widget-primary {
+  font-family: -apple-system, "SF Pro Display", system-ui;
+  font-weight: 200;
+  font-size: 46px;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  font-variant-numeric: tabular-nums;
+  color: oklch(0.99 0 0);
+}
+
+.ios-widget-primary--bold {
+  font-weight: 700;
+  font-size: 60px;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+}
+
+.ios-widget-foot {
+  font-family: -apple-system, "SF Pro Text", system-ui;
+  font-size: 11px;
+  font-weight: 500;
+  color: oklch(0.6 0 0);
+  letter-spacing: -0.01em;
+}
+
+/* ── App grid ── */
 
 .ios-app-grid {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(var(--safe-top, 0px) + 190px);
-  bottom: calc(var(--safe-bottom, 0px) + 130px);
+  left: 18px;
+  right: 18px;
+  top: calc(var(--safe-top, 0px) + 240px);
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 28px 12px;
-  padding: 0 36px;
-  align-content: start;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px 10px;
   z-index: 10;
 }
 
@@ -750,7 +763,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background: none;
   border: 0;
   padding: 0;
@@ -761,91 +774,65 @@ body {
 .ios-app:active .ios-app-icon { transform: scale(0.94); }
 
 .ios-app-icon {
-  width: 84px;
-  height: 84px;
-  border-radius: 22px;
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow:
-    0 2px 0 oklch(0 0 0 / 0.4),
-    0 8px 16px oklch(0 0 0 / 0.4),
-    inset 0 1px 0 oklch(1 0 0 / 0.5);
+    0 6px 14px oklch(0 0 0 / 0.4),
+    0 1px 2px oklch(0 0 0 / 0.2);
   position: relative;
   overflow: hidden;
   transition: transform 0.08s ease;
 }
 
-.ios-app-icon-gloss {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, oklch(1 0 0 / 0.38) 0%, oklch(1 0 0 / 0) 50%);
-  border-radius: inherit;
-  pointer-events: none;
+.ios-app-label {
+  font-family: -apple-system, "SF Pro Text", system-ui;
+  font-size: 11px;
+  font-weight: 400;
+  color: oklch(0.98 0 0);
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 2px oklch(0 0 0 / 0.3);
 }
 
-.ios-app-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: oklch(0.99 0 0);
-  text-shadow: 0 1px 2px oklch(0 0 0 / 0.6);
-  letter-spacing: 0.01em;
-}
+/* ── Dock (decorative — non-interactive) ── */
 
 .ios-dock {
   position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: calc(var(--safe-bottom, 0px) + 36px);
-  height: 96px;
-  background: linear-gradient(180deg, oklch(1 0 0 / 0.25) 0%, oklch(1 0 0 / 0.15) 100%);
-  border-radius: 20px;
-  border-top: 1px solid oklch(1 0 0 / 0.3);
-  border-bottom: 1px solid oklch(0 0 0 / 0.2);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
-  box-shadow: 0 -1px 0 oklch(0 0 0 / 0.15), inset 0 1px 0 oklch(1 0 0 / 0.45);
+  left: 10px;
+  right: 10px;
+  bottom: calc(var(--safe-bottom, 0px) + 80px);
+  background: oklch(0.22 0 0 / 0.28);
+  border: 0.5px solid oklch(1 0 0 / 0.06);
+  border-radius: 30px;
+  backdrop-filter: blur(30px) saturate(1.6);
+  -webkit-backdrop-filter: blur(30px) saturate(1.6);
+  padding: 10px 14px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   z-index: 15;
 }
 
-.ios-dock-inner { display: flex; gap: 14px; align-items: center; }
-.ios-dock-app { display: flex; flex-direction: column; align-items: center; }
-
 .ios-dock-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 16px;
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow:
-    0 2px 0 oklch(0 0 0 / 0.3),
-    0 6px 10px oklch(0 0 0 / 0.35),
-    inset 0 1px 0 oklch(1 0 0 / 0.5);
+  box-shadow: 0 4px 10px oklch(0 0 0 / 0.3);
   position: relative;
   overflow: hidden;
 }
 
-.ios-home-indicator {
-  position: absolute;
-  bottom: calc(var(--safe-bottom, 0px) + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  width: 134px;
-  height: 5px;
-  border-radius: 3px;
-  background: oklch(1 0 0 / 0.55);
-  z-index: 30;
-}
-
-/* ── iOS app view (fullscreen) ── */
+/* ── iOS app view (fullscreen, Reader/Editorial palette) ── */
 .ios-app-view {
   position: fixed;
   inset: 0;
-  background: oklch(0.97 0.005 240);
+  background: oklch(0.98 0.005 85);
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -860,15 +847,16 @@ body {
 
 .ios-navbar {
   padding-top: var(--safe-top, 0px);
-  height: calc(var(--safe-top, 0px) + 44px);
+  height: calc(var(--safe-top, 0px) + 48px);
   display: flex;
   align-items: center;
-  padding-left: 12px;
-  padding-right: 12px;
-  background: linear-gradient(180deg, oklch(0.97 0 0) 0%, oklch(0.84 0 0) 100%);
-  border-bottom: 1px solid oklch(0.55 0 0);
-  box-shadow: 0 1px 0 oklch(1 0 0 / 0.6) inset, 0 2px 3px oklch(0 0 0 / 0.1);
-  color: oklch(0.15 0 0);
+  padding-left: 14px;
+  padding-right: 14px;
+  background: oklch(0.98 0.005 85 / 0.82);
+  backdrop-filter: blur(22px) saturate(1.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  border-bottom: 0.5px solid oklch(0 0 0 / 0.1);
+  color: oklch(0.15 0.02 40);
   flex-shrink: 0;
   position: relative;
 }
@@ -876,88 +864,256 @@ body {
 .ios-back {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: linear-gradient(180deg, oklch(0.95 0 0), oklch(0.78 0 0));
-  border: 1px solid oklch(0.55 0 0);
-  border-radius: 6px;
-  padding: 4px 8px 4px 6px;
-  font-family: "Helvetica Neue", system-ui;
-  font-size: 14px;
-  font-weight: 500;
-  color: oklch(0.15 0 0);
+  gap: 2px;
+  background: transparent;
+  border: 0;
+  padding: 6px 4px;
+  font-family: -apple-system, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: oklch(0.42 0.14 35);
   cursor: pointer;
-  box-shadow: 0 1px 0 oklch(1 0 0 / 0.6) inset, 0 1px 2px oklch(0 0 0 / 0.15);
+  letter-spacing: -0.01em;
 }
+
+.ios-back svg { margin-right: 4px; }
 
 .ios-navbar-title {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  font-family: "Helvetica Neue", system-ui;
-  font-weight: 700;
-  font-size: 17px;
-  color: oklch(0.15 0 0);
-  text-shadow: 0 1px 0 oklch(1 0 0 / 0.6);
+  font-family: Georgia, "Young Serif", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 16px;
+  color: oklch(0.3 0.03 40);
+  letter-spacing: 0.02em;
 }
 
 .ios-app-body {
   flex: 1;
   overflow-y: auto;
-  padding: 22px 20px calc(var(--safe-bottom, 0px) + 40px);
-  background: oklch(0.97 0.005 240);
-  font-family: var(--font-serif), Georgia, serif;
-  color: oklch(0.15 0 0);
+  padding: 24px 22px calc(var(--safe-bottom, 0px) + 80px);
+  background: oklch(0.98 0.005 85);
+  font-family: Georgia, "Young Serif", serif;
+  color: oklch(0.15 0.02 40);
   -webkit-overflow-scrolling: touch;
+}
+
+/* ── Editorial content building blocks (mobile app views) ── */
+
+.ed-kicker {
+  font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: oklch(0.5 0.06 35);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.ed-title {
+  font-family: Georgia, "Young Serif", serif;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+  color: oklch(0.15 0.02 40);
+}
+
+.ed-rule {
+  border: 0;
+  height: 1px;
+  background: oklch(0.65 0.06 40 / 0.28);
+  margin: 0 0 18px;
+}
+
+.ed-body {
+  font-family: Georgia, "Young Serif", serif;
+  font-size: 16px;
+  line-height: 1.55;
+  color: oklch(0.18 0.02 40);
+  margin-bottom: 14px;
+}
+
+.ed-section-label {
+  font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: oklch(0.5 0.06 35);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 24px 0 12px;
+  display: block;
+}
+
+.ed-timeline-item {
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 0.5px solid oklch(0.65 0.06 40 / 0.3);
+}
+
+.ed-timeline-item:last-child { border-bottom: 0; margin-bottom: 0; }
+
+.ed-timeline-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.ed-timeline-title {
+  font-family: Georgia, "Young Serif", serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: oklch(0.15 0.02 40);
+}
+
+.ed-timeline-period {
+  font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+  font-size: 10px;
+  color: oklch(0.45 0.06 35);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ed-timeline-desc {
+  font-family: Georgia, "Young Serif", serif;
+  font-size: 14px;
+  color: oklch(0.32 0.02 40);
+  line-height: 1.5;
+}
+
+.ed-link-row {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 0.5px solid oklch(0.65 0.06 40 / 0.3);
+  text-decoration: none;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ed-link-row:last-child { border-bottom: 0; }
+
+.ed-link-glyph {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: oklch(0.92 0.03 60);
+  color: oklch(0.35 0.1 35);
+  font-family: Georgia, serif;
+  font-size: 16px;
+}
+
+.ed-link-label {
+  font-family: Georgia, "Young Serif", serif;
+  font-size: 15px;
+  color: oklch(0.15 0.02 40);
+  margin-bottom: 1px;
+}
+
+.ed-link-value {
+  font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+  font-size: 11px;
+  color: oklch(0.45 0.04 40);
+  letter-spacing: -0.01em;
+}
+
+.ed-chevron {
+  color: oklch(0.6 0.04 40);
+  flex-shrink: 0;
+}
+
+.ed-card {
+  background: oklch(0.96 0.015 75);
+  border: 0.5px solid oklch(0.65 0.06 40 / 0.35);
+  border-radius: 8px;
+  padding: 16px 16px;
+}
+
+.ed-tag {
+  font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+  font-size: 10px;
+  padding: 3px 8px;
+  border: 0.5px solid oklch(0.55 0.06 40 / 0.4);
+  border-radius: 4px;
+  color: oklch(0.35 0.04 40);
+  letter-spacing: 0.06em;
+  background: oklch(0.98 0.005 85);
+}
+
+.ed-status {
+  font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+  font-size: 10px;
+  padding: 2px 8px;
+  background: oklch(0.78 0.17 65);
+  color: oklch(0.18 0.05 60);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 3px;
 }
 
 .ios-list-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 0;
-  border-bottom: 1px solid oklch(0.85 0 0);
+  padding: 16px 0;
+  border-bottom: 0.5px solid oklch(0.65 0.06 40 / 0.3);
   text-decoration: none;
   color: inherit;
   -webkit-tap-highlight-color: transparent;
 }
 
 .ios-list-row:active {
-  background: oklch(0.9 0.03 240);
-  margin: 0 -20px;
-  padding: 14px 20px;
+  background: oklch(0.95 0.02 60);
+  margin: 0 -22px;
+  padding: 16px 22px;
 }
 
 .ios-list-row > div { flex: 1; min-width: 0; }
 
 .ios-list-row-title {
-  font-family: "Helvetica Neue", system-ui;
-  font-weight: 600;
-  font-size: 16px;
-  color: oklch(0.15 0 0);
-  line-height: 1.3;
+  font-family: Georgia, "Young Serif", serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: oklch(0.15 0.02 40);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
 .ios-list-row-meta {
-  font-family: var(--font-mono), monospace;
-  font-size: 11px;
-  color: oklch(0.5 0 0);
-  letter-spacing: 0.04em;
-  margin-top: 2px;
+  font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+  font-size: 10px;
+  color: oklch(0.5 0.06 35);
+  letter-spacing: 0.12em;
+  margin-top: 4px;
   text-transform: uppercase;
 }
 
 .ios-list-row-excerpt {
-  font-size: 13px;
-  color: oklch(0.4 0 0);
-  margin-top: 4px;
-  line-height: 1.45;
+  font-family: Georgia, "Young Serif", serif;
+  font-size: 14px;
+  color: oklch(0.32 0.02 40);
+  margin-top: 6px;
+  line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.ios-list-row svg { color: oklch(0.6 0 0); flex-shrink: 0; }
+.ios-list-row svg { color: oklch(0.55 0.06 40); flex-shrink: 0; }
 
 /* ════════════════════════════════════════════════════════════
    Writings pages — desktop (Mac doc paper) + mobile (iOS reader)
@@ -1359,97 +1515,107 @@ body {
 
 .writings-nav-link-next { text-align: right; }
 
-/* ── Mobile: iOS Reader / Notes aesthetic for writings ── */
+/* ── Mobile: Editorial/Reader aesthetic for writings ──
+   Matches the .ed-* palette used by the app views — warm off-white
+   paper (oklch 0.98 0.005 85), Georgia body, SF Mono kickers, warm
+   amber accents instead of iOS blue. ── */
 @media (max-width: 639px) {
   body { overflow: auto; }
 
   .writings-page-root {
-    background: oklch(0.99 0.003 240);
-    font-family: -apple-system, "Helvetica Neue", Helvetica, system-ui, sans-serif;
+    background: oklch(0.98 0.005 85);
+    font-family: Georgia, "Young Serif", serif;
+    color: oklch(0.15 0.02 40);
   }
 
   .writings-topbar {
-    height: calc(var(--safe-top, 0px) + 44px);
+    height: calc(var(--safe-top, 0px) + 48px);
     padding-top: var(--safe-top, 0px);
-    background: linear-gradient(180deg, oklch(0.98 0 0) 0%, oklch(0.84 0 0) 100%);
-    border-bottom: 1px solid oklch(0.5 0 0);
-    box-shadow: 0 1px 0 oklch(1 0 0 / 0.6) inset, 0 2px 3px oklch(0 0 0 / 0.1);
-    padding-left: 12px;
-    padding-right: 12px;
+    background: oklch(0.98 0.005 85 / 0.82);
+    backdrop-filter: blur(22px) saturate(1.5);
+    -webkit-backdrop-filter: blur(22px) saturate(1.5);
+    border-bottom: 0.5px solid oklch(0 0 0 / 0.1);
+    box-shadow: none;
+    padding-left: 14px;
+    padding-right: 14px;
   }
 
   .writings-back-link {
-    background: linear-gradient(180deg, oklch(0.95 0 0), oklch(0.78 0 0));
-    border: 1px solid oklch(0.55 0 0);
-    border-radius: 6px;
-    padding: 4px 10px 4px 8px;
-    font-family: -apple-system, "Helvetica Neue", system-ui;
-    font-size: 14px;
-    font-weight: 500;
-    color: oklch(0.15 0 0);
-    box-shadow: 0 1px 0 oklch(1 0 0 / 0.6) inset, 0 1px 2px oklch(0 0 0 / 0.15);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 6px 4px;
+    font-family: -apple-system, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+    color: oklch(0.42 0.14 35);
+    box-shadow: none;
     text-transform: none;
-    letter-spacing: 0;
+    letter-spacing: -0.01em;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
 
   .writings-back-link:hover {
     transform: none;
-    box-shadow: 0 1px 0 oklch(1 0 0 / 0.6) inset, 0 1px 2px oklch(0 0 0 / 0.15);
+    box-shadow: none;
+    background: transparent;
   }
 
-  .writings-index-content { padding: 28px 20px calc(var(--safe-bottom, 0px) + 60px); }
+  .writings-index-content { padding: 28px 22px calc(var(--safe-bottom, 0px) + 80px); }
 
   .writings-index-title {
-    font-family: -apple-system, "Helvetica Neue", system-ui;
-    font-weight: 700;
+    font-family: Georgia, "Young Serif", serif;
+    font-weight: 400;
     font-size: 32px;
     letter-spacing: -0.02em;
-    color: oklch(0.12 0 0);
+    color: oklch(0.15 0.02 40);
     line-height: 1.05;
   }
 
   .writings-index-description {
-    font-family: -apple-system, "Helvetica Neue", system-ui;
-    font-size: 15px;
-    color: oklch(0.45 0 0);
-    line-height: 1.45;
-    margin-bottom: 32px;
+    font-family: Georgia, "Young Serif", serif;
+    font-size: 16px;
+    color: oklch(0.3 0.02 40);
+    line-height: 1.55;
+    margin-bottom: 28px;
   }
 
   .writings-year-label {
-    font-family: var(--font-mono), monospace;
-    font-size: 11px;
-    font-weight: 600;
+    font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+    font-size: 10px;
+    font-weight: 500;
     background: none;
     border: 0;
     padding: 0;
-    color: oklch(0.55 0 0);
-    letter-spacing: 0.14em;
-    margin-bottom: 8px;
+    color: oklch(0.5 0.06 35);
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
     text-transform: uppercase;
   }
 
   .writings-year-group {
-    background: oklch(1 0 0);
-    border: 1px solid oklch(0.82 0 0);
-    border-radius: 10px;
-    margin: 0 0 24px;
-    overflow: hidden;
-    box-shadow: 0 1px 0 oklch(0 0 0 / 0.04);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    margin: 0 0 28px;
+    overflow: visible;
+    box-shadow: none;
   }
 
-  .writings-year-group .writings-year-label { padding: 14px 16px 6px; margin: 0; }
+  .writings-year-group .writings-year-label { padding: 0; margin: 0 0 10px; }
 
   .writings-post-row {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 12px;
-    padding: 14px 16px;
+    padding: 14px 0;
     margin: 0;
-    border-bottom: 1px solid oklch(0.88 0 0);
+    border-bottom: 0.5px solid oklch(0.65 0.06 40 / 0.3);
     border-top: 0;
-    background: oklch(1 0 0);
+    background: transparent;
     transition: background 0.08s ease;
   }
 
@@ -1457,16 +1623,19 @@ body {
 
   .writings-post-row:hover,
   .writings-post-row:active {
-    background: oklch(0.92 0.03 240);
+    background: oklch(0.95 0.02 60);
+    margin: 0 -22px;
+    padding: 14px 22px;
     transform: none;
   }
 
   .writings-post-row-title {
-    font-family: -apple-system, "Helvetica Neue", system-ui;
-    font-size: 16px;
-    font-weight: 600;
-    color: oklch(0.12 0 0);
+    font-family: Georgia, "Young Serif", serif;
+    font-size: 17px;
+    font-weight: 400;
+    color: oklch(0.15 0.02 40);
     line-height: 1.3;
+    letter-spacing: -0.01em;
     flex: 1;
   }
 
@@ -1478,110 +1647,129 @@ body {
   }
 
   .writings-post-row-tag {
-    font-family: var(--font-mono), monospace;
+    font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
     font-size: 9px;
-    color: oklch(0.55 0 0);
-    letter-spacing: 0.1em;
+    color: oklch(0.5 0.06 35);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
 
   .writings-post-row-date {
-    font-family: -apple-system, system-ui;
-    font-size: 11px;
-    color: oklch(0.55 0 0);
+    font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+    font-size: 10px;
+    color: oklch(0.45 0.06 35);
+    letter-spacing: 0.08em;
     min-width: 0;
   }
 
-  .writings-article { padding: 28px 20px calc(var(--safe-bottom, 0px) + 80px); max-width: 100%; }
+  .writings-article { padding: 28px 22px calc(var(--safe-bottom, 0px) + 100px); max-width: 100%; }
 
-  .writings-article-meta { gap: 8px; margin-bottom: 18px; }
+  .writings-article-meta { gap: 10px; margin-bottom: 18px; }
 
   .writings-article-tag {
-    font-family: var(--font-mono), monospace;
+    font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
     font-size: 9px;
     padding: 3px 8px;
-    border: 1px solid oklch(0.7 0 0);
+    border: 0.5px solid oklch(0.55 0.06 40 / 0.4);
     border-radius: 4px;
-    color: oklch(0.4 0 0);
-    letter-spacing: 0.1em;
+    color: oklch(0.35 0.04 40);
+    letter-spacing: 0.14em;
+    background: transparent;
+    text-transform: uppercase;
   }
 
-  .writings-meta-dot { background: oklch(0.7 0 0); }
+  .writings-meta-dot { background: oklch(0.55 0.06 40 / 0.5); }
 
   .writings-article-date,
-  .writings-article-reading-time { font-size: 11px; color: oklch(0.5 0 0); }
+  .writings-article-reading-time {
+    font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+    font-size: 10px;
+    color: oklch(0.45 0.06 35);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
 
   .writings-article-title {
-    font-family: -apple-system, "Helvetica Neue", system-ui;
-    font-weight: 700;
-    font-size: 28px;
-    line-height: 1.15;
+    font-family: Georgia, "Young Serif", serif;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.08;
     letter-spacing: -0.02em;
-    color: oklch(0.1 0 0);
-    margin-bottom: 10px;
+    color: oklch(0.12 0.02 40);
+    margin-bottom: 12px;
   }
 
   .writings-article-subtitle {
-    font-family: -apple-system, "Helvetica Neue", system-ui;
+    font-family: Georgia, "Young Serif", serif;
+    font-style: italic;
     font-size: 17px;
-    color: oklch(0.4 0 0);
-    line-height: 1.45;
+    color: oklch(0.3 0.03 40);
+    line-height: 1.5;
     margin-bottom: 24px;
     font-weight: 400;
   }
 
   .writings-article-rule {
-    border-top: 1px solid oklch(0.82 0 0);
+    border-top: 0.5px solid oklch(0.65 0.06 40 / 0.35);
     margin-bottom: 28px;
   }
 
   .writings-article-rule::before {
-    font-family: -apple-system, system-ui;
-    background: oklch(0.99 0.003 240);
-    font-size: 16px;
-    top: -12px;
-    color: oklch(0.6 0 0);
+    font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+    background: oklch(0.98 0.005 85);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    top: -8px;
+    color: oklch(0.5 0.06 35);
   }
 
   .writings-article-body p {
-    font-family: Georgia, -apple-system, serif;
+    font-family: Georgia, "Young Serif", serif;
     font-size: 17px;
     line-height: 1.65;
-    color: oklch(0.15 0 0);
+    color: oklch(0.16 0.02 40);
     margin-bottom: 20px;
   }
 
   .writings-article-body > p:first-child::first-letter {
-    font-family: Georgia, serif;
-    font-size: 44px;
-    font-weight: 700;
+    font-family: Georgia, "Young Serif", serif;
+    font-size: 48px;
+    font-weight: 400;
     line-height: 0.9;
     margin-top: 4px;
-    color: oklch(0.15 0 0);
+    margin-right: 6px;
+    float: left;
+    color: oklch(0.35 0.12 35);
   }
 
   .writings-article-body h2 {
-    font-family: -apple-system, "Helvetica Neue", system-ui;
+    font-family: Georgia, "Young Serif", serif;
     font-size: 22px;
-    font-weight: 700;
-    color: oklch(0.1 0 0);
+    font-weight: 400;
+    color: oklch(0.12 0.02 40);
     margin-top: 36px;
     margin-bottom: 12px;
+    letter-spacing: -0.01em;
   }
 
   .writings-article-body h3 {
-    font-family: -apple-system, "Helvetica Neue", system-ui;
-    font-size: 17px;
-    font-weight: 600;
-    color: oklch(0.12 0 0);
+    font-family: Georgia, "Young Serif", serif;
+    font-style: italic;
+    font-size: 18px;
+    font-weight: 400;
+    color: oklch(0.15 0.02 40);
     margin-top: 28px;
     margin-bottom: 10px;
   }
 
   .writings-article-body a {
-    color: oklch(0.5 0.18 245);
+    color: oklch(0.42 0.14 35);
     background: none;
     box-shadow: none;
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-thickness: 0.5px;
+    text-underline-offset: 3px;
+    text-decoration-color: oklch(0.42 0.14 35 / 0.4);
     padding: 0;
     border-bottom: 0;
   }
@@ -1589,68 +1777,97 @@ body {
   .writings-article-body a:hover { background: none; }
 
   .writings-article-body code {
-    background: oklch(0.94 0.01 240);
+    font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+    background: oklch(0.94 0.02 75);
     border: 0;
     border-radius: 3px;
     font-size: 13px;
-    padding: 1px 5px;
+    padding: 1px 6px;
+    color: oklch(0.3 0.05 35);
   }
 
   .writings-article-body pre {
-    background: oklch(0.15 0.01 240);
-    color: oklch(0.95 0 0);
+    background: oklch(0.15 0.01 40);
+    color: oklch(0.92 0.02 75);
     border: 0;
     border-radius: 10px;
-    margin: 20px -20px;
-    padding: 16px 20px;
+    margin: 24px -22px;
+    padding: 18px 22px;
     box-shadow: none;
   }
 
-  .writings-article-body pre code { background: none; color: oklch(0.95 0 0); }
+  .writings-article-body pre code {
+    background: none;
+    color: oklch(0.92 0.02 75);
+    font-size: 13px;
+  }
 
-  .writings-article-body blockquote { padding-left: 14px; margin: 24px 0; }
+  .writings-article-body blockquote {
+    padding: 4px 0 4px 18px;
+    margin: 28px 0;
+    border-left: 0;
+  }
 
   .writings-article-body blockquote::before {
-    background: oklch(0.5 0.12 245);
-    width: 3px;
+    content: "";
+    position: absolute;
+    left: 22px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: oklch(0.55 0.14 35 / 0.5);
   }
 
-  .writings-article-body blockquote p { color: oklch(0.35 0 0); font-style: italic; }
+  .writings-article-body blockquote p {
+    color: oklch(0.28 0.03 40);
+    font-style: italic;
+    font-family: Georgia, "Young Serif", serif;
+    margin-bottom: 0;
+  }
 
   .writings-article-body li {
-    font-family: Georgia, serif;
+    font-family: Georgia, "Young Serif", serif;
     font-size: 17px;
     line-height: 1.65;
-    color: oklch(0.15 0 0);
+    color: oklch(0.16 0.02 40);
   }
+
+  .writings-article-body li::marker {
+    font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+    color: oklch(0.5 0.06 35);
+    font-size: 14px;
+  }
+
+  .writings-article-body strong { font-weight: 700; color: oklch(0.12 0.02 40); }
 
   .writings-article-body img {
     border: 0;
     border-radius: 10px;
-    box-shadow: 0 2px 8px oklch(0 0 0 / 0.1);
-    margin: 24px 0;
+    box-shadow: 0 2px 12px oklch(0 0 0 / 0.08);
+    margin: 28px 0;
   }
 
   .writings-article-footer {
-    border-top: 1px solid oklch(0.82 0 0);
-    padding-top: 20px;
-    margin-top: 44px;
+    border-top: 0.5px solid oklch(0.65 0.06 40 / 0.35);
+    padding-top: 24px;
+    margin-top: 48px;
   }
 
   .writings-nav-label {
-    color: oklch(0.55 0 0);
-    font-family: -apple-system, system-ui;
-    letter-spacing: 0.04em;
-    font-size: 11px;
+    color: oklch(0.5 0.06 35);
+    font-family: "SF Mono", ui-monospace, var(--font-mono), monospace;
+    letter-spacing: 0.2em;
+    font-size: 10px;
+    text-transform: uppercase;
   }
 
   .writings-nav-title {
-    font-family: -apple-system, "Helvetica Neue", system-ui;
-    font-size: 14px;
-    color: oklch(0.25 0.14 240);
+    font-family: Georgia, "Young Serif", serif;
+    font-size: 15px;
+    color: oklch(0.28 0.1 35);
   }
 
   .writings-nav-link:hover .writings-nav-title { text-decoration: none; }
 
-  .writings-reading-progress { height: 2px; background: oklch(0.55 0.2 25); }
+  .writings-reading-progress { height: 2px; background: oklch(0.55 0.2 45); }
 }
