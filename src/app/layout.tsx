@@ -36,7 +36,10 @@ export const metadata: Metadata = {
   description:
     "Personal site of Sam Merkovitz — projects, writing, and things I'm thinking about.",
   icons: {
-    icon: "/sam-logo-black.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
     apple: "/sam-logo-black.png",
   },
   openGraph: {
