@@ -38,7 +38,7 @@ export default function PersonalContent() {
             letterSpacing: "-0.01em",
           }}
         >
-          hello, i&apos;m sam.
+          Hi, I&apos;m Sam.
         </h1>
       </header>
 
