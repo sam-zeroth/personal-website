@@ -7,6 +7,7 @@ import BootSequence from "@/components/boot/BootSequence";
 
 const AquaDesktop = dynamic(() => import("./AquaDesktop"), { ssr: false });
 const PhoneHome = dynamic(() => import("@/components/phone/PhoneHome"), { ssr: false });
+const DebugOverlay = dynamic(() => import("@/components/phone/DebugOverlay"), { ssr: false });
 
 interface Props {
   initialMobileHint: boolean;
@@ -31,6 +32,7 @@ export default function ClientGate({ initialMobileHint, writings }: Props) {
     <>
       {mobile ? <PhoneHome writings={writings} /> : <AquaDesktop writings={writings} />}
       <BootSequence isMobile={mobile} />
+      <DebugOverlay />
     </>
   );
 }
