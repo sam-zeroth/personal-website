@@ -6,7 +6,8 @@ export default function ReadingProgress() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const root = document.getElementById("writings-scroll");
+    const isMobile = window.matchMedia("(max-width: 639px)").matches;
+    const root = isMobile ? null : document.getElementById("writings-scroll");
     const target: HTMLElement | Window = root ?? window;
 
     function compute() {
