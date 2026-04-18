@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useCallback, useState } from "react";
 import MacMenuBar from "@/components/mac/MacMenuBar";
 import MacWindow from "@/components/mac/MacWindow";
+import DraggableIcon, {
+  useIconPositions,
+  type IconSpec,
+} from "@/components/mac/DraggableIcon";
 import {
   FolderIcon,
   PersonIcon,
@@ -43,13 +47,19 @@ function formatDate(d: string) {
   });
 }
 
-function iconCoords(index: number) {
-  return { top: 24 + index * 104, right: 24 };
-}
+const ICON_SPECS: IconSpec[] = [
+  { key: "readme", anchor: { top: 24, left: 28 } },
+  { key: "personal", anchor: { top: 24, right: 24 } },
+  { key: "work", anchor: { top: 128, right: 24 } },
+  { key: "writings-folder", anchor: { top: 232, right: 24 } },
+  { key: "contact", anchor: { top: 336, right: 24 } },
+  { key: "trash", anchor: { bottom: 28, right: 28 } },
+];
 
 export default function AquaDesktop({ writings }: AquaDesktopProps) {
   const [windows, setWindows] = useState<OpenWindow[]>([]);
   const [maxZ, setMaxZ] = useState(100);
+  const { positions, update, ready } = useIconPositions(ICON_SPECS);
 
   const spawnWindow = useCallback(
     (key: WindowKey) => {
@@ -197,56 +207,40 @@ export default function AquaDesktop({ writings }: AquaDesktopProps) {
     <div className="mac-stage variant-aqua">
       <MacMenuBar variant="aqua" appName={appName} />
 
-      {/* Desktop icons */}
-      <div style={{ position: "absolute", inset: 0, zIndex: 15 }}>
-        {[
-          { key: "personal" as const, label: "About Me", render: () => <PersonIcon /> },
-          { key: "work" as const, label: "Work", render: () => <BriefcaseIcon /> },
-          { key: "writings-folder" as const, label: "Writings", render: () => <FolderIcon variant="aqua" /> },
-          { key: "contact" as const, label: "Contact", render: () => <PhoneIcon /> },
-        ].map((icon, i) => {
-          const { top, right } = iconCoords(i);
+      {/* Desktop icons — draggable, persist to localStorage */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 15,
+          visibility: ready ? "visible" : "hidden",
+        }}
+      >
+        {(
+          [
+            { key: "readme", label: "README.txt", render: () => <DocumentIcon />, onOpen: () => spawnWindow("readme") },
+            { key: "personal", label: "About Me", render: () => <PersonIcon />, onOpen: () => spawnWindow("personal") },
+            { key: "work", label: "Work", render: () => <BriefcaseIcon />, onOpen: () => spawnWindow("work") },
+            { key: "writings-folder", label: "Writings", render: () => <FolderIcon variant="aqua" />, onOpen: () => spawnWindow("writings-folder") },
+            { key: "contact", label: "Contact", render: () => <PhoneIcon />, onOpen: () => spawnWindow("contact") },
+            { key: "trash", label: "Trash", render: () => <TrashIcon />, onOpen: undefined },
+          ] as const
+        ).map((icon) => {
+          const pos = positions[icon.key];
+          if (!pos) return null;
           return (
-            <button
+            <DraggableIcon
               key={icon.key}
-              type="button"
-              className="mac-icon"
-              style={{ position: "absolute", top, right }}
-              onDoubleClick={() => spawnWindow(icon.key)}
-              onClick={() => spawnWindow(icon.key)}
-              aria-label={`Open ${icon.label}`}
+              label={icon.label}
+              position={pos}
+              onPositionChange={(next) => update(icon.key, next)}
+              onOpen={icon.onOpen}
+              ariaLabel={icon.onOpen ? `Open ${icon.label}` : icon.label}
             >
-              <span className="mac-icon-glyph">{icon.render()}</span>
-              <span className="mac-icon-label">{icon.label}</span>
-            </button>
+              {icon.render()}
+            </DraggableIcon>
           );
         })}
-
-        {/* Trash */}
-        <div style={{ position: "absolute", bottom: 28, right: 28, zIndex: 15 }}>
-          <div className="mac-icon" style={{ cursor: "default" }}>
-            <span className="mac-icon-glyph">
-              <TrashIcon />
-            </span>
-            <span className="mac-icon-label">Trash</span>
-          </div>
-        </div>
-
-        {/* README */}
-        <div style={{ position: "absolute", top: 24, left: 28, zIndex: 15 }}>
-          <button
-            type="button"
-            className="mac-icon"
-            onDoubleClick={() => spawnWindow("readme")}
-            onClick={() => spawnWindow("readme")}
-            aria-label="Open README"
-          >
-            <span className="mac-icon-glyph">
-              <DocumentIcon />
-            </span>
-            <span className="mac-icon-label">README.txt</span>
-          </button>
-        </div>
       </div>
 
       {/* Open windows */}

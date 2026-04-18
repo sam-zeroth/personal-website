@@ -59,6 +59,7 @@ export default function MacWindow({
     onFocus?.();
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     dragState.current = { dx: e.clientX - frame.x, dy: e.clientY - frame.y };
+    document.body.classList.add("is-dragging");
   };
   const onDrag = (e: ReactPointerEvent<HTMLDivElement>) => {
     if (!dragState.current) return;
@@ -71,6 +72,7 @@ export default function MacWindow({
   };
   const endDrag = (e: ReactPointerEvent<HTMLDivElement>) => {
     dragState.current = null;
+    document.body.classList.remove("is-dragging");
     try {
       (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
     } catch {}
@@ -87,6 +89,7 @@ export default function MacWindow({
       startW: frame.w,
       startH: frame.h,
     };
+    document.body.classList.add("is-resizing");
     e.stopPropagation();
     e.preventDefault();
   };
@@ -104,6 +107,7 @@ export default function MacWindow({
   };
   const endResize = (e: ReactPointerEvent<HTMLDivElement>) => {
     resizeState.current = null;
+    document.body.classList.remove("is-resizing");
     try {
       (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
     } catch {}
@@ -137,6 +141,14 @@ export default function MacWindow({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
+
+  // Safety: if this window unmounts mid-drag/resize, release cursor-lock classes
+  useEffect(() => {
+    return () => {
+      if (dragState.current) document.body.classList.remove("is-dragging");
+      if (resizeState.current) document.body.classList.remove("is-resizing");
+    };
+  }, []);
 
   // Keep a maximized window sized to viewport on resize
   useEffect(() => {

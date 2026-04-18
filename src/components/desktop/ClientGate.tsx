@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import BootSequence from "@/components/boot/BootSequence";
 
 const AquaDesktop = dynamic(() => import("./AquaDesktop"), { ssr: false });
 const PhoneHome = dynamic(() => import("@/components/phone/PhoneHome"), { ssr: false });
@@ -26,8 +27,10 @@ export default function ClientGate({ initialMobileHint, writings }: Props) {
     setMobile(viewportMobile);
   }, [viewportMobile]);
 
-  if (mobile) {
-    return <PhoneHome writings={writings} />;
-  }
-  return <AquaDesktop writings={writings} />;
+  return (
+    <>
+      {mobile ? <PhoneHome writings={writings} /> : <AquaDesktop writings={writings} />}
+      <BootSequence isMobile={mobile} />
+    </>
+  );
 }
