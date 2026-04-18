@@ -97,6 +97,195 @@ body {
 }
 
 /* ════════════════════════════════════════════════════════════
+   Boot sequence — Mac OS X on desktop, iOS 6 on mobile
+   ════════════════════════════════════════════════════════════ */
+
+.boot-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 560ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: auto;
+  user-select: none;
+  isolation: isolate;
+}
+
+/* Desktop Mac variant — warm light gray */
+.boot-stage.boot-mac {
+  background:
+    radial-gradient(ellipse 120% 80% at 50% 40%,
+      oklch(0.9 0.004 240) 0%,
+      oklch(0.84 0.006 240) 60%,
+      oklch(0.8 0.008 240) 100%);
+}
+
+/* Mobile iOS 6 variant — near-black */
+.boot-stage.boot-ios {
+  background: oklch(0.05 0.004 240);
+}
+
+.boot-stage.boot-fading {
+  opacity: 0;
+  transform: scale(1.035);
+  pointer-events: none;
+}
+
+/* iOS variant doesn't scale on exit — just fades, like a real device booting */
+.boot-stage.boot-ios.boot-fading {
+  transform: scale(1);
+}
+
+/* Subtle noise on the Mac variant only */
+.boot-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.boot-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(-3%);
+}
+
+.boot-mac .boot-inner { gap: 44px; }
+.boot-ios .boot-inner { gap: 64px; }
+
+/* Pixel-art SM monogram — rendered from a pre-computed bitmap SVG */
+.boot-logo {
+  opacity: 0;
+  display: block;
+}
+
+.boot-mac .boot-logo {
+  color: oklch(0.16 0.004 240);
+  filter:
+    drop-shadow(0 1px 0 oklch(1 0 0 / 0.5))
+    drop-shadow(0 2px 6px oklch(0.2 0.01 240 / 0.22));
+}
+
+.boot-ios .boot-logo {
+  color: oklch(0.98 0.004 240);
+  filter: drop-shadow(0 0 22px oklch(0.75 0.02 240 / 0.22));
+}
+
+.boot-stage.boot-hydrated .boot-logo {
+  animation: boot-logo-in 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes boot-logo-in {
+  0%   { opacity: 0; transform: translateY(6px) scale(0.94); }
+  60%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Desktop: classic Aqua radial spinner ──────────────────── */
+
+.boot-spinner {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  opacity: 0;
+}
+
+.boot-stage.boot-hydrated .boot-spinner {
+  animation: boot-fade-in 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 820ms;
+}
+
+.boot-spinner span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 3px;
+  height: 9px;
+  margin-left: -1.5px;
+  border-radius: 1.5px;
+  background: oklch(0.32 0.005 240);
+  transform-origin: 1.5px 16px;
+  transform: rotate(calc(var(--i) * 30deg));
+  opacity: 0.18;
+  animation: boot-tick 1s linear infinite;
+  animation-delay: calc(var(--i) * -83.333ms);
+}
+
+@keyframes boot-tick {
+  0%   { opacity: 1; }
+  100% { opacity: 0.18; }
+}
+
+/* ── Mobile: iOS 6-style thin progress bar ──────────────────── */
+
+.boot-progress {
+  position: relative;
+  width: 168px;
+  height: 3px;
+  border-radius: 2px;
+  background: oklch(1 0 0 / 0.08);
+  overflow: hidden;
+  opacity: 0;
+  box-shadow:
+    inset 0 0 0 0.5px oklch(1 0 0 / 0.06),
+    0 0 12px oklch(0.7 0.03 240 / 0.08);
+}
+
+.boot-stage.boot-hydrated .boot-progress {
+  animation: boot-fade-in 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 900ms;
+}
+
+.boot-progress-fill {
+  position: absolute;
+  inset: 0 0 0 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(
+    90deg,
+    oklch(0.82 0.015 240) 0%,
+    oklch(0.98 0.005 240) 50%,
+    oklch(0.82 0.015 240) 100%);
+  border-radius: inherit;
+  box-shadow: 0 0 10px oklch(0.95 0.02 240 / 0.32);
+  will-change: transform;
+}
+
+.boot-stage.boot-hydrated .boot-progress-fill {
+  animation: boot-progress-fill 2500ms cubic-bezier(0.33, 0, 0.25, 1) both;
+  animation-delay: 900ms;
+}
+
+@keyframes boot-progress-fill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes boot-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot-stage { transition-duration: 150ms; }
+  .boot-stage.boot-hydrated .boot-logo,
+  .boot-stage.boot-hydrated .boot-spinner,
+  .boot-stage.boot-hydrated .boot-progress,
+  .boot-stage.boot-hydrated .boot-progress-fill { animation: none; opacity: 1; }
+  .boot-spinner span { animation: none; opacity: 0.4; }
+  .boot-progress-fill { transform: scaleX(1); }
+}
+
+/* ════════════════════════════════════════════════════════════
    Mac desktop (Aqua chrome)
    ════════════════════════════════════════════════════════════ */
 
@@ -174,13 +363,21 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  cursor: default;
+  cursor: grab;
   padding: 4px;
   border-radius: 4px;
   user-select: none;
   background: none;
   border: 0;
-  transition: background 0.08s ease;
+  transition: background 0.08s ease, transform 0.12s cubic-bezier(0.22, 1, 0.36, 1);
+  touch-action: none;
+}
+
+.mac-icon-dragging {
+  cursor: grabbing;
+  transform: scale(1.05);
+  z-index: 30;
+  filter: drop-shadow(0 8px 14px oklch(0 0 0 / 0.35));
 }
 
 .mac-icon:focus { outline: none; }
@@ -422,6 +619,44 @@ body {
   background: linear-gradient(180deg, oklch(0.88 0 0), oklch(0.8 0 0));
   border-bottom: 1px solid oklch(0.5 0 0);
   color: oklch(0.12 0 0);
+}
+
+/* ── Custom cursors (desktop / pointer:fine only) ── */
+@media (pointer: fine) {
+  html, body {
+    cursor: url("/cursors/arrow.svg") 3 2, default;
+  }
+
+  a[href],
+  .mac-tl,
+  .mac-window-min-chip {
+    cursor: url("/cursors/pointer.svg") 12 2, pointer;
+  }
+
+  .mac-titlebar,
+  .mac-icon {
+    cursor: url("/cursors/grab.svg") 14 14, grab;
+  }
+  .mac-titlebar:active,
+  .mac-icon:active,
+  .mac-icon-dragging {
+    cursor: url("/cursors/grabbing.svg") 14 14, grabbing;
+  }
+
+  .mac-resize-handle {
+    cursor: url("/cursors/resize-nwse.svg") 14 14, nwse-resize;
+  }
+
+  /* Pointer capture during window drag/resize: force cursor globally
+     so it doesn't revert when the mouse leaves the originating element. */
+  body.is-dragging,
+  body.is-dragging * {
+    cursor: url("/cursors/grabbing.svg") 14 14, grabbing !important;
+  }
+  body.is-resizing,
+  body.is-resizing * {
+    cursor: url("/cursors/resize-nwse.svg") 14 14, nwse-resize !important;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
