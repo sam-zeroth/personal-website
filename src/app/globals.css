@@ -57,6 +57,17 @@ body {
   overflow: hidden;
 }
 
+/* iOS Safari paints the body's bg behind the status bar and URL pill when
+   fixed elements with inset:0 don't extend that far. Swap the body bg to
+   match the active surface so the safe-area regions don't flash the dark
+   desktop bg. Matches the home stage (black), app view (cream), and
+   writings paper (cream) so chrome areas stay visually seamless. */
+@media (max-width: 639px) {
+  body:has(.ios-stage) { background: oklch(0 0 0); }
+  body:has(.ios-app-view),
+  body:has(.writings-page-root) { background: oklch(0.98 0.005 85); }
+}
+
 ::selection {
   background: var(--win-ink);
   color: var(--win-bg);
