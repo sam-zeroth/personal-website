@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Pixelify_Sans, JetBrains_Mono, Young_Serif } from "next/font/google";
+import ThemeColorManager from "@/components/phone/ThemeColorManager";
 import "./globals.css";
 
 const pixelify = Pixelify_Sans({
@@ -24,7 +25,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#d8c9a6",
+  colorScheme: "light",
+  themeColor: "#000000",
 };
 
 export const metadata: Metadata = {
@@ -63,6 +65,7 @@ export default function RootLayout({
       <body
         className={`${pixelify.variable} ${jetbrains.variable} ${youngSerif.variable} antialiased`}
       >
+        <ThemeColorManager />
         {children}
       </body>
     </html>
