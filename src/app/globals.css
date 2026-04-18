@@ -907,7 +907,7 @@ body {
 .ios-app-body {
   flex: 1;
   overflow-y: auto;
-  padding: 24px 22px calc(var(--safe-bottom, 0px) + 80px);
+  padding: 24px 22px env(safe-area-inset-bottom);
   background: oklch(0.98 0.005 85);
   font-family: Georgia, "Young Serif", serif;
   color: oklch(0.15 0.02 40);
@@ -1630,7 +1630,7 @@ body {
   }
 
   .writings-index-content {
-    padding: 28px 22px calc(var(--safe-bottom, 0px) + 80px);
+    padding: 28px 22px env(safe-area-inset-bottom);
     /* Force the inner scroll container to overflow, which lets iOS Safari
        minimize its URL pill on scroll and extend the viewport behind
        Safari chrome. Without this, short lists sit in a fixed small
@@ -1735,7 +1735,7 @@ body {
     min-width: 0;
   }
 
-  .writings-article { padding: 28px 22px calc(var(--safe-bottom, 0px) + 100px); max-width: 100%; }
+  .writings-article { padding: 28px 22px env(safe-area-inset-bottom); max-width: 100%; }
 
   .writings-article-meta { gap: 10px; margin-bottom: 18px; }
 
