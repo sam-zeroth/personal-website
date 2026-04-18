@@ -921,6 +921,51 @@ body {
   min-height: calc(100% + 1px);
 }
 
+/* Mobile: move app-view scrolling to body level so iOS Safari reliably
+   minimizes the bottom toolbar (inner-container scroll doesn't trigger
+   the full chrome collapse on iOS 17+, only body/document scroll does).
+   With body-level scroll: the navbar sticks to the top, the article
+   flows in the body, and the URL pill minimizes to its compact state
+   once the user scrolls — letting cream extend behind Safari chrome. */
+@media (max-width: 639px) {
+  body:has(.ios-app-view) .ios-stage { display: none; }
+
+  .ios-app-view {
+    position: static;
+    display: block;
+    overflow: visible;
+    min-height: 100dvh;
+    animation: none;
+  }
+
+  .ios-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .ios-app-body {
+    overflow: visible;
+    -webkit-overflow-scrolling: auto;
+  }
+
+  .ios-app-body > article {
+    min-height: auto;
+  }
+
+  /* Writings pages: same move — scroll at body level, not inside a fixed
+     container, so iOS Safari minimizes its bottom chrome on scroll. */
+  .writings-page-root {
+    position: static;
+    overflow: visible;
+    min-height: 100dvh;
+  }
+
+  .writings-index-content {
+    min-height: auto;
+  }
+}
+
 /* ── Editorial content building blocks (mobile app views) ── */
 
 .ed-kicker {
