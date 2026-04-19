@@ -5,6 +5,8 @@
    ════════════════════════════════════════════════════════════ */
 
 :root {
+  color-scheme: light;
+
   /* Window chrome (Aqua / paper) */
   --win-bg: oklch(0.96 0 0);
   --win-ink: oklch(0.12 0 0);
