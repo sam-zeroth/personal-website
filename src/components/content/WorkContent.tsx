@@ -6,7 +6,6 @@ interface Project {
   tech: string[];
   year: string;
   url?: string;
-  status: "shipping" | "building" | "archived";
 }
 
 const projects: Project[] = [
@@ -17,7 +16,22 @@ const projects: Project[] = [
     tech: ["Python", "TypeScript", "AI Agents"],
     year: "2025",
     url: "https://pyrana.ai",
-    status: "building",
+  },
+  {
+    title: "Pyrana Roadmap",
+    description:
+      "Open-source roadmapping tool built internally at Zeroth Agents. Syncs with Linear and Google Drive, lets anyone submit and vote on ideas before they hit the roadmap, and exposes the whole thing over MCP so agents can read and update it directly.",
+    tech: ["TypeScript", "MCP", "Linear", "Open Source"],
+    year: "2025",
+    url: "https://github.com/zeroth-agents/pyrana-roadmap",
+  },
+  {
+    title: "sammerk.app",
+    description:
+      "Personal command center — workouts, meal plans, tasks, calendar. MCP integration so a swarm of agents can manage and update my plans for me.",
+    tech: ["TypeScript", "MCP", "AI Agents"],
+    year: "2025",
+    url: "https://github.com/sam-zeroth/sammerk-app",
   },
 ];
 
@@ -77,30 +91,16 @@ export default function WorkContent() {
             e.currentTarget.style.boxShadow = "3px 3px 0 var(--win-ink)";
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
-            <h3
-              style={{
-                fontFamily: "var(--font-pixelify), system-ui",
-                fontSize: 20,
-                fontWeight: 700,
-              }}
-            >
-              {project.title} <span style={{ fontSize: 14, opacity: 0.6 }}>↗</span>
-            </h3>
-            <span
-              style={{
-                fontFamily: "var(--font-mono), monospace",
-                fontSize: 11,
-                padding: "2px 8px",
-                background: "var(--hot-amber)",
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-              }}
-            >
-              {project.status}
-            </span>
-          </div>
+          <h3
+            style={{
+              fontFamily: "var(--font-pixelify), system-ui",
+              fontSize: 20,
+              fontWeight: 700,
+              marginBottom: 8,
+            }}
+          >
+            {project.title} <span style={{ fontSize: 14, opacity: 0.6 }}>↗</span>
+          </h3>
           <p style={{ fontSize: 14, lineHeight: 1.55, color: "oklch(0.28 0.02 80)" }}>
             {project.description}
           </p>
