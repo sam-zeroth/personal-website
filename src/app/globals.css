@@ -57,6 +57,20 @@ body {
   overflow: hidden;
 }
 
+/* Root wrapper on `/`. Fixed on desktop so the Mac stage doesn't scroll;
+   on mobile we want the document body to scroll (so iOS Safari collapses
+   its bottom toolbar), so let main flow naturally. */
+.app-main {
+  position: fixed;
+  inset: 0;
+}
+
+@media (max-width: 639px) {
+  .app-main {
+    position: static;
+  }
+}
+
 /* iOS Safari doesn't reliably propagate body's bg to the canvas when body
    has overflow:hidden + safe-area insets, so fixed elements that fail to
    extend behind the status bar / URL pill leave the default dark bg showing.
@@ -934,7 +948,12 @@ body {
     position: static;
     display: block;
     overflow: visible;
-    min-height: 100dvh;
+    /* +1px so the document always overflows the viewport — iOS Safari
+       only collapses its bottom toolbar to the translucent compact pill
+       when the page is scrollable. On a short page (About/Contact) that
+       exactly fits 100dvh, Safari keeps the solid full-toolbar chrome,
+       which shows as a dark strip cutting off the cream. */
+    min-height: calc(100dvh + 1px);
     animation: none;
   }
 
@@ -953,17 +972,6 @@ body {
     min-height: auto;
   }
 
-  /* Writings pages: same move — scroll at body level, not inside a fixed
-     container, so iOS Safari minimizes its bottom chrome on scroll. */
-  .writings-page-root {
-    position: static;
-    overflow: visible;
-    min-height: 100dvh;
-  }
-
-  .writings-index-content {
-    min-height: auto;
-  }
 }
 
 /* ── Editorial content building blocks (mobile app views) ── */
@@ -1589,6 +1597,13 @@ body {
   body { overflow: auto; }
 
   .writings-page-root {
+    /* Body-level scroll on mobile so iOS Safari minimizes the bottom
+       toolbar (inner-container scroll alone doesn't reliably trigger
+       it). +1px ensures the document overflows even for a short list,
+       which is what makes Safari collapse to its translucent pill. */
+    position: static;
+    overflow: visible;
+    min-height: calc(100dvh + 1px);
     background: oklch(0.98 0.005 85);
     font-family: Georgia, "Young Serif", serif;
     color: oklch(0.15 0.02 40);

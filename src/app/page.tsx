@@ -21,7 +21,7 @@ export default async function Home() {
   const mobileHint = isMobileUA(ua);
 
   return (
-    <main style={{ position: "fixed", inset: 0 }}>
+    <main className="app-main">
       <ClientGate initialMobileHint={mobileHint} writings={writings} />
     </main>
   );
