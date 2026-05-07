@@ -68,6 +68,11 @@ body {
 @media (max-width: 639px) {
   .app-main {
     position: static;
+    /* +1px forces body to overflow the viewport so the browser collapses
+       its bottom chrome. Otherwise — on the home screen where nothing
+       else is scrollable — Safari/Comet keep the full toolbar, and the
+       area behind it renders as a cream strip under our black stage. */
+    min-height: calc(100dvh + 1px);
   }
 }
 
