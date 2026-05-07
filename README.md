@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# personal-website
 
-## Getting Started
+Sam Merkovitz's personal site. The concept: the site IS an operating system.
 
-First, run the development server:
+- **Desktop** — Mac OS X Aqua (early-2000s era): menu bar, desktop icons, draggable / resizable / maximizable windows.
+- **Mobile** — iOS 6 skeuomorphic home: a 2×2 grid of glossy app icons, a glass dock, iOS-style fullscreen app views.
+- **Writings** — each article is a "document": full-screen Mac doc on desktop, iOS Reader-style on mobile.
+
+See [`.impeccable.md`](./.impeccable.md) for the design brief and [`CLAUDE.md`](./CLAUDE.md) for repo conventions.
+
+## Stack
+
+- Next.js 16 (App Router, webpack mode)
+- React 19
+- TypeScript strict
+- Tailwind v4 + a single `globals.css` with design tokens
+- MDX via `next-mdx-remote` for writings
+- `zustand` for the small bit of UI state (active window region)
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev      # next dev --webpack (port 3000)
+npm run build    # production build
+npm run lint     # eslint
+npx tsc --noEmit # type-check (no test suite yet)
+```
 
-## Learn More
+## Repo layout
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/                  # routes, global styles, fonts, OG image
+│   ├── globals.css       # Mac + iOS + writings styles, all in one file
+│   └── writings/         # /writings index + /writings/[slug] articles
+├── components/
+│   ├── content/          # section bodies (Personal, Work, Writings, Contact)
+│   ├── desktop/          # AquaDesktop + ClientGate (mobile/desktop switch)
+│   ├── mac/              # Mac primitives: MenuBar, Window, icons
+│   └── phone/            # PhoneHome (iOS home + fullscreen app view)
+├── hooks/useIsMobile.ts
+├── lib/writings.ts       # MDX frontmatter parser + file listing
+└── store/useStore.ts     # zustand: active region, navigate/goHome
+content/writings/         # MDX essays — drop a file in to publish
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Adding an essay
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Create `content/writings/your-slug.mdx` with frontmatter:
 
-## Deploy on Vercel
+```mdx
+---
+title: "..."
+date: "YYYY-MM-DD"
+tag: "Essay"
+excerpt: "..."
+---
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The Finder and the writings index pick it up automatically.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+
+Deployed on [Railway](https://railway.app/). Pushes to `main` deploy automatically.
